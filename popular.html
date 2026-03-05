@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What's Popular? — Fragrance Lab</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Amazon Ember', Arial, Helvetica, sans-serif; background: #EAEDED; min-height: 100vh; }
+
+  /* Nav */
+  .nav { background: #131921; padding: 8px 24px; display: flex; align-items: center; gap: 16px; }
+  .nav-links { margin-left: auto; display: flex; align-items: center; gap: 20px; }
+  .nav-link { color: #ccc; font-size: 13px; text-decoration: none; transition: color 0.2s; }
+  .nav-link:hover { color: #fff; }
+  .nav-link.active { color: #fff; font-weight: 600; }
+
+  /* Page header */
+  .page-header { background: linear-gradient(135deg, #232F3E10 0%, #fff 60%); padding: 28px 0 0; }
+  .page-header-inner { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+  .page-tag  { font-size: 10px; color: #565959; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; }
+  .page-header h1 { font-size: 26px; font-weight: 800; color: #0F1111; margin: 4px 0 2px; letter-spacing: -0.5px; }
+  .page-header p  { font-size: 14px; color: #565959; margin: 0 0 20px; }
+
+  /* Filter bar */
+  .filter-bar { background: #fff; border-bottom: 1px solid #D5D9D9; padding: 14px 24px; position: sticky; top: 0; z-index: 10; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+  .filter-inner { max-width: 1080px; margin: 0 auto; display: flex; align-items: center; gap: 28px; flex-wrap: wrap; }
+  .filter-group { display: flex; align-items: center; gap: 8px; }
+  .filter-label { font-size: 12px; font-weight: 700; color: #0F1111; text-transform: uppercase; letter-spacing: 0.8px; white-space: nowrap; }
+  .filter-btn { padding: 6px 14px; border-radius: 18px; border: 1.5px solid #D5D9D9; background: #fff; color: #565959; font-family: inherit; font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+  .filter-btn:hover { border-color: #aaa; color: #0F1111; }
+  .filter-btn.active { background: #232F3E; border-color: #232F3E; color: #fff; font-weight: 700; }
+  .filter-sep { width: 1px; height: 24px; background: #D5D9D9; }
+  .total-pill { margin-left: auto; background: #f0f0f0; padding: 5px 14px; border-radius: 18px; font-size: 12px; color: #565959; font-weight: 600; white-space: nowrap; }
+
+  /* Content */
+  .content { max-width: 1080px; margin: 0 auto; padding: 28px 24px 48px; }
+
+  /* Charts grid */
+  .charts-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  @media (max-width: 860px) { .charts-grid { grid-template-columns: 1fr; } }
+
+  /* Chart card */
+  .chart-card { background: #fff; border-radius: 12px; border: 1px solid #D5D9D9; padding: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
+  .chart-title { font-size: 13px; font-weight: 700; color: #0F1111; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+  .chart-title-icon { font-size: 16px; }
+  .chart-sub { font-size: 11px; color: #888; margin-bottom: 18px; font-style: italic; }
+  .chart-wrap { position: relative; height: 240px; }
+
+  /* Legend */
+  .legend { margin-top: 16px; display: flex; flex-direction: column; gap: 6px; }
+  .legend-row { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #0F1111; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .legend-name { flex: 1; }
+  .legend-count { color: #565959; font-size: 11px; }
+  .legend-pct { font-weight: 700; color: #0F1111; font-size: 11px; min-width: 34px; text-align: right; }
+
+  /* Empty state */
+  .empty { text-align: center; padding: 60px 20px; background: #fff; border-radius: 12px; border: 1px solid #D5D9D9; }
+  .empty-icon { font-size: 48px; margin-bottom: 16px; }
+  .empty h3 { font-size: 17px; font-weight: 700; color: #0F1111; margin-bottom: 8px; }
+  .empty p { font-size: 13px; color: #565959; max-width: 380px; margin: 0 auto; }
+
+  /* Stats bar */
+  .stats-bar { display: flex; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
+  .stat-card { background: #fff; border-radius: 10px; border: 1px solid #D5D9D9; padding: 16px 20px; flex: 1; min-width: 140px; box-shadow: 0 1px 6px rgba(0,0,0,0.04); }
+  .stat-value { font-size: 28px; font-weight: 800; color: #0F1111; letter-spacing: -1px; }
+  .stat-label { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 0.8px; margin-top: 2px; }
+
+  /* Footer */
+  .footer { margin-top: 36px; padding-top: 14px; border-top: 1px solid #ddd; text-align: center; }
+  .footer span { font-size: 11px; color: #999; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<div class="nav">
+  <svg width="90" height="28" viewBox="0 0 603 182" fill="none">
+    <path d="M374 142c-35 26-85 40-129 40-61 0-116-22-157-60-3-3 0-7 4-5 45 26 100 41 157 41 38 0 81-8 120-24 6-3 11 4 5 8z" fill="#F90"/>
+    <path d="M389 125c-5-6-30-3-42-1-3 0-4-3-1-5 20-14 53-10 57-5s-1 39-20 56c-3 2-5 1-4-2 4-10 13-33 10-43z" fill="#F90"/>
+    <path d="M348 20V7c0-2 1-3 3-3h53c2 0 3 1 3 3v11c0 2-2 4-5 8l-27 39c10 0 21 1 30 6 2 1 3 3 3 5v14c0 2-2 5-5 3-19-10-45-11-66 0-2 1-4 0-4-3V77c0-3 0-7 2-10l32-45h-27c-2 0-3-1-3-3z" fill="#fff"/>
+    <path d="M124 92H99c-2 0-4-2-4-4V7c0-2 2-4 4-4h23c2 0 4 2 4 4v11h1c6-14 18-20 34-20 16 0 26 6 33 20C200 5 214-3 233-3c14 0 30 6 36 20 4 10 3 24 3 36v35c0 2-2 4-4 4h-24c-2 0-4-2-4-4V54c0-5 0-17-1-22-2-8-7-10-14-10-6 0-12 4-14 10-3 6-2 17-2 22v34c0 2-2 4-4 4h-24c-2 0-4-2-4-4V54c0-13 2-32-15-32-16 0-17 19-17 32v34c0 2-2 4-4 4z" fill="#fff"/>
+    <path d="M464-2c37 0 57 32 57 72 0 39-22 70-57 70-37 0-57-32-57-71 0-40 20-71 57-71zm0 26c-19 0-20 26-20 42s-1 44 20 44 21-27 21-43c0-11-1-24-4-34-3-9-9-9-17-9z" fill="#fff"/>
+    <path d="M555 92h-24c-2 0-4-2-4-4V7c0-2 2-4 4-4h22c2 0 3 1 3 3v12h1c5-12 13-19 26-19 15 0 23 6 29 19 5-13 14-19 27-19 8 0 18 3 23 11 6 9 5 21 5 33v35c0 2-2 4-4 4h-24c-2 0-4-2-4-4V53c0-13 2-32-15-32-6 0-13 4-15 11-3 7-2 17-2 24v32c0 2-2 4-4 4h-24c-2 0-4-2-4-4V53c0-13 3-33-15-33-17 0-17 20-17 33v35c-2 2-4 4-6 4z" fill="#fff"/>
+    <path d="M57 52c0 9 1 17-4 25-5 7-12 11-20 11-11 0-17-8-17-21C16 50 28 44 57 44v8zm25 40c-2 1-4 2-5 0-7-7-9-12-14-20-12 13-21 17-37 17-19 0-26-14-26-28 0-21 13-35 31-42 16-6 38-7 55-9v-3c0-6 0-13-3-18-3-4-8-6-14-6-9 0-18 5-20 15 0 2-2 4-4 4L11 0c-2 0-3-2-3-3C13-7 30-3 38-3h4c19 0 38 4 38 31v28c0 8 4 12 7 16 1 2 1 4 0 5l-5-5z" fill="#fff"/>
+  </svg>
+  <div class="nav-links">
+    <a href="fragrance-lab.html" class="nav-link">Fragrance Lab</a>
+    <a href="popular.html" class="nav-link active">What's Popular?</a>
+  </div>
+</div>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="page-header-inner">
+    <span class="page-tag">Live Analytics</span>
+    <h1>What's Popular?</h1>
+    <p>Real-time breakdown of fragrance note preferences from all submissions.</p>
+  </div>
+</div>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <div class="filter-inner">
+    <div class="filter-group">
+      <span class="filter-label">Gender</span>
+      <button class="filter-btn active" data-filter="sex" data-value="all">All</button>
+      <button class="filter-btn" data-filter="sex" data-value="M">♂ Male</button>
+      <button class="filter-btn" data-filter="sex" data-value="F">♀ Female</button>
+    </div>
+    <div class="filter-sep"></div>
+    <div class="filter-group">
+      <span class="filter-label">Age</span>
+      <button class="filter-btn active" data-filter="age" data-value="all">All</button>
+      <button class="filter-btn" data-filter="age" data-value="18-24">18–24</button>
+      <button class="filter-btn" data-filter="age" data-value="25-34">25–34</button>
+      <button class="filter-btn" data-filter="age" data-value="35-44">35–44</button>
+      <button class="filter-btn" data-filter="age" data-value="45+">45+</button>
+    </div>
+    <span class="total-pill" id="totalPill">0 submissions</span>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+  <!-- Stats bar -->
+  <div class="stats-bar" id="statsBar">
+    <div class="stat-card"><div class="stat-value" id="statTotal">—</div><div class="stat-label">Total Submissions</div></div>
+    <div class="stat-card"><div class="stat-value" id="statMale">—</div><div class="stat-label">Male Respondents</div></div>
+    <div class="stat-card"><div class="stat-value" id="statFemale">—</div><div class="stat-label">Female Respondents</div></div>
+    <div class="stat-card"><div class="stat-value" id="statAvgTime">—</div><div class="stat-label">Avg. Time on Page</div></div>
+  </div>
+
+  <!-- Empty state (shown when no data) -->
+  <div class="empty hidden" id="emptyState">
+    <div class="empty-icon">📊</div>
+    <h3>No data yet</h3>
+    <p>Once people start using the Fragrance Lab and clicking "Find Me a Fragrance", their choices will appear here.</p>
+  </div>
+
+  <!-- Charts -->
+  <div class="charts-grid" id="chartsGrid">
+    <div class="chart-card">
+      <div class="chart-title"><span class="chart-title-icon">🌅</span> Top Notes</div>
+      <div class="chart-sub">First impression — opening 15 minutes</div>
+      <div class="chart-wrap"><canvas id="chartTop"></canvas></div>
+      <div class="legend" id="legendTop"></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title"><span class="chart-title-icon">💐</span> Middle Notes</div>
+      <div class="chart-sub">The heart — character of the fragrance</div>
+      <div class="chart-wrap"><canvas id="chartMid"></canvas></div>
+      <div class="legend" id="legendMid"></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title"><span class="chart-title-icon">🌿</span> Base Notes</div>
+      <div class="chart-sub">The foundation — what lingers for hours</div>
+      <div class="chart-wrap"><canvas id="chartBase"></canvas></div>
+      <div class="legend" id="legendBase"></div>
+    </div>
+  </div>
+
+  <div class="footer"><span>Fragrance Lab by L'Oréal — An Amazon Interactive Experience</span></div>
+</div>
+
+<script>
+// ── Palette ───────────────────────────────────────────────
+const PALETTE = [
+  "#232F3E", "#FF9900", "#067D62", "#9B1B5A", "#3A6B35",
+  "#0073BB", "#C45500", "#6B3A8A", "#BF5700", "#1A6B5A",
+  "#E8A000", "#4A90D9", "#D4380D", "#52C41A", "#722ED1",
+];
+
+// ── State ─────────────────────────────────────────────────
+let allRows  = [];
+let filters  = { sex: "all", age: "all" };
+let charts   = {};
+
+// ── Age range helper ──────────────────────────────────────
+function ageInRange(ageStr, range) {
+  if (range === "all") return true;
+  const age = parseInt(ageStr, 10);
+  if (isNaN(age)) return false;
+  if (range === "18-24") return age >= 18 && age <= 24;
+  if (range === "25-34") return age >= 25 && age <= 34;
+  if (range === "35-44") return age >= 35 && age <= 44;
+  if (range === "45+")   return age >= 45;
+  return true;
+}
+
+// ── Filter rows ───────────────────────────────────────────
+function applyFilters(rows) {
+  return rows.filter(r => {
+    const sexOk = filters.sex === "all" || r.respondent_sex === filters.sex;
+    const ageOk = ageInRange(r.respondent_age, filters.age);
+    return sexOk && ageOk;
+  });
+}
+
+// ── Count frequencies ─────────────────────────────────────
+function countField(rows, field) {
+  const counts = {};
+  rows.forEach(r => {
+    const v = (r[field] || "").trim();
+    if (v) counts[v] = (counts[v] || 0) + 1;
+  });
+  // Sort descending by count
+  return Object.entries(counts)
+    .sort((a, b) => b[1] - a[1])
+    .map(([label, count]) => ({ label, count }));
+}
+
+// ── Draw / update one pie chart ───────────────────────────
+function renderChart(canvasId, legendId, entries) {
+  const labels = entries.map(e => e.label);
+  const data   = entries.map(e => e.count);
+  const total  = data.reduce((a, b) => a + b, 0);
+  const colors = PALETTE.slice(0, labels.length);
+
+  if (charts[canvasId]) {
+    charts[canvasId].data.labels        = labels;
+    charts[canvasId].data.datasets[0].data            = data;
+    charts[canvasId].data.datasets[0].backgroundColor = colors;
+    charts[canvasId].update();
+  } else {
+    const ctx = document.getElementById(canvasId).getContext("2d");
+    charts[canvasId] = new Chart(ctx, {
+      type: "doughnut",
+      data: {
+        labels,
+        datasets: [{
+          data,
+          backgroundColor: colors,
+          borderWidth: 2,
+          borderColor: "#fff",
+          hoverOffset: 8,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: "58%",
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: ctx => {
+                const pct = total > 0 ? ((ctx.parsed / total) * 100).toFixed(1) : 0;
+                return ` ${ctx.label}: ${ctx.parsed} (${pct}%)`;
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
+  // Custom legend
+  const legendEl = document.getElementById(legendId);
+  legendEl.innerHTML = entries.map((e, i) => {
+    const pct = total > 0 ? ((e.count / total) * 100).toFixed(1) : "0.0";
+    return `<div class="legend-row">
+      <span class="legend-dot" style="background:${PALETTE[i] || '#ccc'}"></span>
+      <span class="legend-name">${e.label}</span>
+      <span class="legend-count">${e.count}</span>
+      <span class="legend-pct">${pct}%</span>
+    </div>`;
+  }).join("");
+}
+
+// ── Update stats bar ──────────────────────────────────────
+function updateStats(filtered) {
+  const total   = filtered.length;
+  const male    = filtered.filter(r => r.respondent_sex === "M").length;
+  const female  = filtered.filter(r => r.respondent_sex === "F").length;
+  const times   = filtered.map(r => parseInt(r.time_on_page_sec, 10)).filter(n => !isNaN(n) && n > 0);
+  const avgTime = times.length > 0 ? Math.round(times.reduce((a,b) => a+b, 0) / times.length) : null;
+
+  document.getElementById("statTotal").textContent  = total;
+  document.getElementById("statMale").textContent   = male;
+  document.getElementById("statFemale").textContent = female;
+  document.getElementById("statAvgTime").textContent = avgTime !== null ? avgTime + "s" : "—";
+  document.getElementById("totalPill").textContent  = `${total} submission${total !== 1 ? "s" : ""}`;
+}
+
+// ── Main render ───────────────────────────────────────────
+function render() {
+  const filtered = applyFilters(allRows);
+  updateStats(filtered);
+
+  const topEntries  = countField(filtered, "top_note");
+  const midEntries  = countField(filtered, "middle_note");
+  const baseEntries = countField(filtered, "base_note");
+
+  const hasData = filtered.length > 0;
+  document.getElementById("emptyState").classList.toggle("hidden", hasData);
+  document.getElementById("chartsGrid").classList.toggle("hidden", !hasData);
+
+  if (hasData) {
+    renderChart("chartTop",  "legendTop",  topEntries);
+    renderChart("chartMid",  "legendMid",  midEntries);
+    renderChart("chartBase", "legendBase", baseEntries);
+  }
+}
+
+// ── Load data from server ─────────────────────────────────
+async function loadData() {
+  try {
+    const resp = await fetch("/data");
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    allRows = await resp.json();
+  } catch (e) {
+    console.error("Could not load data:", e.message);
+    allRows = [];
+  }
+  render();
+}
+
+// ── Filter button wiring ──────────────────────────────────
+document.querySelectorAll(".filter-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const group = btn.dataset.filter;
+    const value = btn.dataset.value;
+    filters[group] = value;
+
+    // Update active state within the group
+    document.querySelectorAll(`.filter-btn[data-filter="${group}"]`).forEach(b => {
+      b.classList.toggle("active", b.dataset.value === value);
+    });
+
+    render();
+  });
+});
+
+// ── Auto-refresh every 15 seconds ─────────────────────────
+loadData();
+setInterval(loadData, 15000);
+</script>
+</body>
+</html>
