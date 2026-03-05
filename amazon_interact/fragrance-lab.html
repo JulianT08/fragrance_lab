@@ -3,551 +3,1091 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fragrance Lab by L'Oréal — Amazon</title>
+<title>Fragrance Lab — Amazon × L'Oréal</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Amazon Ember', Arial, Helvetica, sans-serif; background: #EAEDED; min-height: 100vh; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  /* Nav */
-  .nav { background: #131921; padding: 8px 24px; display: flex; align-items: center; gap: 16; }
-  .nav-right { margin-left: auto; display: flex; align-items: center; gap: 6; }
-  .nav-right span { font-size: 12px; }
-  .nav-crumb { color: #ccc; }
-  .nav-sep { color: #555; }
-  .nav-active { color: #fff; font-weight: 600; }
+:root {
+  --ink:       #0a0a0f;
+  --ink2:      #13131a;
+  --ink3:      #1e1e28;
+  --surface:   #22222e;
+  --border:    rgba(255,255,255,0.08);
+  --muted:     rgba(255,255,255,0.35);
+  --text:      rgba(255,255,255,0.88);
+  --gold:      #c9a96e;
+  --gold2:     #e8c97a;
+  --amz:       #ff9900;
+  --r: 0.75rem;
+  --transition: 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+}
 
-  /* Hero */
-  .hero { padding: 20px 0 0; transition: background 0.6s; }
-  .hero-inner { max-width: 980px; margin: 0 auto; padding: 0 20px; }
-  .hero-tag { font-size: 10px; color: #565959; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; }
-  .hero h1 { font-size: 28px; font-weight: 800; color: #0F1111; margin: 4px 0 2px; letter-spacing: -0.5px; }
-  .hero p { font-size: 14px; color: #565959; margin: 0 0 20px; line-height: 1.6; }
+html { scroll-behavior: smooth; }
 
-  /* Layout */
-  .content { max-width: 980px; margin: 0 auto; padding: 0 20px 40px; }
-  .layout { display: flex; gap: 28px; align-items: flex-start; flex-wrap: wrap; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--ink);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
 
-  /* Left column */
-  .left-col { flex: 0 0 240px; display: flex; flex-direction: column; align-items: center; padding: 20px 0; }
-  .bottle-frame { width: 220px; height: 300px; border-radius: 16px; display: flex; align-items: center; justify-content: center; transition: all 0.6s ease; }
-  .bottle-label { margin-top: 14px; font-size: 11px; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; opacity: 0.6; text-align: center; transition: color 0.3s; }
-  .notes-summary { margin-top: 14px; padding: 12px 16px; border-radius: 10px; background: #fff; width: 100%; box-shadow: 0 1px 6px rgba(0,0,0,0.04); display: none; }
-  .notes-summary.visible { display: block; }
-  .notes-summary-title { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; margin-bottom: 8px; }
-  .note-row { font-size: 12px; color: #565959; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
-  .note-row .icon { font-size: 14px; }
-  .note-row .label { color: #888; font-size: 11px; }
-  .note-row .value { color: #0F1111; font-weight: 500; }
+/* ── NAV ──────────────────────────────────────────── */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center;
+  padding: 0 2rem;
+  height: 52px;
+  background: rgba(10,10,15,0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo { display: flex; align-items: center; gap: 10px; }
+.nav-logo svg { width: 72px; opacity: 0.9; }
+.nav-divider { width: 1px; height: 20px; background: var(--border); margin: 0 14px; }
+.nav-title { font-family: 'Cormorant Garamond', serif; font-size: 16px; font-weight: 300; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); }
+.nav-right { margin-left: auto; display: flex; align-items: center; gap: 1.5rem; }
+.nav-link { font-size: 12px; font-weight: 400; color: var(--muted); text-decoration: none; letter-spacing: 1px; text-transform: uppercase; transition: color 0.2s; cursor: pointer; }
+.nav-link:hover, .nav-link.active { color: var(--text); }
 
-  /* Right column */
-  .right-col { flex: 1; min-width: 300px; }
-  .card { background: #fff; border-radius: 12px; border: 1px solid #D5D9D9; padding: 28px; box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
+/* ── HERO ─────────────────────────────────────────── */
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+  padding: 80px 2rem 4rem;
+}
 
-  /* Section headers */
-  .section-hdr { margin-bottom: 10px; }
-  .section-hdr-row { display: flex; align-items: center; gap: 8px; margin-bottom: 3px; }
-  .step-num { width: 24px; height: 24px; border-radius: 50%; color: #fff; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; transition: background 0.3s; }
-  .section-hdr-row span:last-child { font-size: 14px; font-weight: 700; color: #0F1111; }
-  .section-sub { font-size: 12px; color: #565959; margin-left: 32px; font-style: italic; }
+/* Animated scent cloud */
+.scent-cloud {
+  position: absolute; inset: 0; pointer-events: none;
+  overflow: hidden;
+}
+.orb {
+  position: absolute; border-radius: 50%;
+  filter: blur(80px);
+  animation: drift var(--d, 20s) ease-in-out infinite alternate;
+  opacity: var(--op, 0.18);
+}
+@keyframes drift {
+  from { transform: translate(0, 0) scale(1); }
+  to   { transform: translate(var(--tx, 40px), var(--ty, 30px)) scale(var(--sc, 1.15)); }
+}
 
-  /* Pills */
-  .pill-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 26px; }
-  .pill { padding: 9px 16px; border-radius: 22px; border: 1.5px solid #D5D9D9; background: #fff; color: #0F1111; font-family: inherit; font-size: 13px; font-weight: 400; cursor: pointer; transition: all 0.25s cubic-bezier(.4,0,.2,1); white-space: nowrap; display: flex; align-items: center; gap: 6px; }
-  .pill .icon { font-size: 15px; }
-  .pill:hover { border-color: #aaa; }
-  .pill.selected { font-weight: 600; transform: scale(1.04); }
+.hero-eyebrow {
+  font-size: 10px; font-weight: 500; letter-spacing: 4px; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 1.2rem; opacity: 0;
+  animation: fadeUp 0.8s 0.2s forwards;
+}
+.hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(56px, 9vw, 110px);
+  font-weight: 300; line-height: 0.92;
+  text-align: center; letter-spacing: -1px;
+  opacity: 0; animation: fadeUp 0.9s 0.4s forwards;
+}
+.hero-title em { font-style: italic; color: var(--gold); }
+.hero-subtitle {
+  font-size: 14px; font-weight: 300; color: var(--muted);
+  text-align: center; max-width: 420px; line-height: 1.7;
+  margin-top: 1.4rem; letter-spacing: 0.3px;
+  opacity: 0; animation: fadeUp 0.9s 0.6s forwards;
+}
+.hero-cta {
+  margin-top: 2.5rem;
+  display: flex; gap: 1rem;
+  opacity: 0; animation: fadeUp 0.9s 0.8s forwards;
+}
+.btn-primary {
+  padding: 14px 36px; border-radius: 2px;
+  background: var(--gold); color: var(--ink);
+  font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500;
+  letter-spacing: 2px; text-transform: uppercase; border: none; cursor: pointer;
+  transition: var(--transition);
+}
+.btn-primary:hover { background: var(--gold2); transform: translateY(-1px); }
+.btn-ghost {
+  padding: 14px 36px; border-radius: 2px;
+  background: transparent; color: var(--text);
+  font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 400;
+  letter-spacing: 2px; text-transform: uppercase;
+  border: 1px solid var(--border); cursor: pointer;
+  transition: var(--transition);
+}
+.btn-ghost:hover { border-color: rgba(255,255,255,0.3); transform: translateY(-1px); }
 
-  .divider { border: none; border-bottom: 1px solid #E7E7E7; margin: 0 0 22px; }
+/* Scroll indicator */
+.scroll-hint {
+  position: absolute; bottom: 2rem;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  opacity: 0; animation: fadeUp 1s 1.2s forwards;
+}
+.scroll-hint span { font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); }
+.scroll-line {
+  width: 1px; height: 40px; background: linear-gradient(to bottom, var(--muted), transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+@keyframes scrollPulse { 0%,100%{opacity:0.3;transform:scaleY(1)} 50%{opacity:1;transform:scaleY(1.2)} }
+@keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
 
-  /* CTA */
-  .cta { width: 100%; padding: 13px 0; border-radius: 24px; border: none; font-size: 15px; font-weight: 700; cursor: not-allowed; transition: all 0.3s ease; letter-spacing: 0.3px; background: #E7E7E7; color: #999; font-family: inherit; }
-  .cta.active { background: linear-gradient(to bottom, #F7DFA5, #F0C14B); color: #111; cursor: pointer; box-shadow: 0 3px 10px rgba(240,193,75,0.35); }
-  .cta-hint { font-size: 12px; color: #888; text-align: center; margin-top: 10px; }
+/* ── MOOD SELECTOR ────────────────────────────────── */
+.mood-section {
+  padding: 5rem 2rem;
+  max-width: 1100px; margin: 0 auto;
+}
+.section-label {
+  font-size: 9px; letter-spacing: 4px; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 0.6rem;
+}
+.section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(32px, 4vw, 52px); font-weight: 300; line-height: 1.1;
+  margin-bottom: 0.4rem;
+}
+.section-sub { font-size: 13px; color: var(--muted); font-weight: 300; margin-bottom: 3rem; }
 
-  /* Results */
-  .results-hdr { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
-  .results-hdr h2 { font-size: 19px; font-weight: 700; color: #0F1111; }
-  .btn-reset { padding: 6px 18px; border-radius: 18px; border: 1px solid #D5D9D9; background: #fff; color: #0F1111; font-size: 12px; cursor: pointer; font-family: inherit; }
-  .results-sub { font-size: 13px; color: #565959; margin-bottom: 18px; }
+.mood-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+.mood-card {
+  background: var(--ink2); padding: 2.5rem 2rem;
+  cursor: pointer; position: relative; overflow: hidden;
+  transition: var(--transition);
+}
+.mood-card::before {
+  content: ''; position: absolute; inset: 0;
+  background: var(--mood-color, var(--gold));
+  opacity: 0; transition: opacity 0.4s;
+}
+.mood-card:hover::before, .mood-card.active::before { opacity: 0.07; }
+.mood-card.active { background: var(--ink3); }
+.mood-card.active .mood-icon { transform: scale(1.15); }
+.mood-icon {
+  font-size: 2.2rem; margin-bottom: 1.2rem;
+  display: block; transition: transform 0.4s;
+  line-height: 1;
+}
+.mood-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px; font-weight: 400; margin-bottom: 0.5rem;
+}
+.mood-desc { font-size: 12px; color: var(--muted); font-weight: 300; line-height: 1.6; }
+.mood-check {
+  position: absolute; top: 1.5rem; right: 1.5rem;
+  width: 20px; height: 20px; border-radius: 50%;
+  background: var(--gold); display: none;
+  align-items: center; justify-content: center;
+  font-size: 10px; color: var(--ink);
+}
+.mood-card.active .mood-check { display: flex; }
 
-  /* No match */
-  .no-match { text-align: center; padding: 44px 20px; background: #FFF8E1; border-radius: 10px; border: 1px solid #FFE0B2; }
-  .no-match .emoji { font-size: 40px; margin-bottom: 14px; }
-  .no-match h3 { font-size: 16px; font-weight: 600; color: #0F1111; margin-bottom: 6px; }
-  .no-match p { font-size: 13px; color: #565959; margin-bottom: 18px; }
-  .btn-retry { padding: 10px 32px; border-radius: 22px; border: none; background: linear-gradient(to bottom, #F7DFA5, #F0C14B); color: #111; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; }
+/* ── NOTE BUILDER ─────────────────────────────────── */
+.builder-section {
+  padding: 5rem 2rem;
+  background: var(--ink2);
+}
+.builder-inner { max-width: 1100px; margin: 0 auto; }
+.builder-grid { display: grid; grid-template-columns: 1fr 360px; gap: 3rem; align-items: start; }
 
-  /* Result card */
-  .result-card { border: 1px solid #D5D9D9; border-radius: 10px; padding: 18px; background: #fff; margin-bottom: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); display: flex; gap: 16px; align-items: flex-start; }
-  .result-icon { width: 72px; height: 72px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .result-body { flex: 1; min-width: 0; }
-  .result-name { font-size: 15px; font-weight: 600; color: #0F1111; margin-bottom: 3px; }
-  .stars-row { display: flex; align-items: center; gap: 6px; margin-bottom: 5px; }
-  .stars-bg { color: #ddd; font-size: 15px; letter-spacing: 2px; position: relative; display: inline-block; }
-  .stars-fill { position: absolute; left: 0; top: 0; overflow: hidden; color: #FF9900; font-size: 15px; letter-spacing: 2px; white-space: nowrap; }
-  .stars-count { font-size: 12px; color: #007185; }
-  .note-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
-  .note-tag { background: #f0f0f0; padding: 2px 8px; border-radius: 10px; font-size: 11px; color: #565959; }
-  .result-price { font-size: 18px; font-weight: 700; color: #0F1111; margin-bottom: 10px; }
-  .result-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
-  .btn-cart { padding: 8px 22px; border-radius: 22px; border: none; background: linear-gradient(to bottom, #FFD814, #F0C14B); color: #0F1111; font-weight: 600; font-size: 13px; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.12); font-family: inherit; }
-  .btn-details { padding: 8px 22px; border-radius: 22px; border: 1px solid #D5D9D9; background: #fff; color: #0F1111; font-size: 13px; cursor: pointer; font-family: inherit; }
-  .match-badge { padding: 3px 12px; border-radius: 6px; font-size: 11px; font-weight: 600; color: #fff; }
+.note-layer { margin-bottom: 2.8rem; }
+.layer-header {
+  display: flex; align-items: baseline; gap: 1rem;
+  margin-bottom: 1.2rem; padding-bottom: 0.8rem;
+  border-bottom: 1px solid var(--border);
+}
+.layer-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px; font-weight: 400;
+}
+.layer-hint { font-size: 11px; color: var(--muted); font-weight: 300; }
+.layer-timing {
+  margin-left: auto; font-size: 10px; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--gold); font-weight: 500;
+}
 
-  /* Footer */
-  .footer { margin-top: 36px; padding-top: 14px; border-top: 1px solid #ddd; text-align: center; }
-  .footer span { font-size: 11px; color: #999; }
+.notes-grid { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.note-pill {
+  padding: 8px 18px; border-radius: 2px;
+  border: 1px solid var(--border);
+  background: transparent; color: var(--muted);
+  font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 400;
+  cursor: pointer; transition: var(--transition);
+  display: flex; align-items: center; gap: 8px;
+  letter-spacing: 0.3px;
+}
+.note-pill:hover {
+  border-color: rgba(201,169,110,0.4);
+  color: var(--text);
+  background: rgba(201,169,110,0.06);
+}
+.note-pill.selected {
+  border-color: var(--gold);
+  color: var(--gold);
+  background: rgba(201,169,110,0.1);
+}
+.note-emoji { font-size: 14px; }
 
-  /* Demographic inputs */
-  .demo-block { display: flex; gap: 28px; align-items: flex-end; margin-bottom: 22px; flex-wrap: wrap; }
-  .demo-field { display: flex; flex-direction: column; gap: 6px; }
-  .demo-label { font-size: 12px; font-weight: 700; color: #0F1111; text-transform: uppercase; letter-spacing: 0.8px; }
-  .demo-radio-row { display: flex; gap: 10px; }
-  .demo-radio-btn { padding: 8px 18px; border-radius: 20px; border: 1.5px solid #D5D9D9; background: #fff; color: #0F1111; font-family: inherit; font-size: 13px; font-weight: 400; cursor: pointer; transition: all 0.2s; }
-  .demo-radio-btn.active { font-weight: 700; border-color: #555; background: #55555514; color: #0F1111; }
-  .demo-age-input { width: 80px; padding: 8px 12px; border-radius: 8px; border: 1.5px solid #D5D9D9; font-family: inherit; font-size: 14px; color: #0F1111; outline: none; transition: border-color 0.2s; -moz-appearance: textfield; }
-  .demo-age-input::-webkit-outer-spin-button,
-  .demo-age-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-  .demo-age-input:focus { border-color: #888; }
+/* Bottle preview panel */
+.preview-panel {
+  position: sticky; top: 80px;
+  background: var(--ink3);
+  border: 1px solid var(--border);
+  padding: 2.5rem 2rem;
+  display: flex; flex-direction: column; align-items: center;
+}
+.preview-label {
+  font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 2rem;
+}
 
-  /* hide by default */
-  .hidden { display: none; }
+/* CSS Bottle */
+.bottle-wrap {
+  position: relative; margin-bottom: 2rem;
+}
+.bottle {
+  width: 100px; height: 200px; position: relative; margin: 0 auto;
+}
+.bottle-cap {
+  width: 38px; height: 20px; border-radius: 3px 3px 0 0;
+  background: linear-gradient(135deg, #888, #555);
+  margin: 0 auto; position: relative; z-index: 2;
+  transition: background 0.6s;
+}
+.bottle-neck {
+  width: 28px; height: 28px; margin: 0 auto;
+  background: var(--bottle-color, rgba(201,169,110,0.2));
+  border-left: 1px solid rgba(255,255,255,0.1);
+  border-right: 1px solid rgba(255,255,255,0.1);
+  transition: background 0.6s;
+}
+.bottle-body {
+  width: 88px; height: 148px; margin: 0 auto;
+  border-radius: 6px;
+  background: var(--bottle-color, rgba(201,169,110,0.12));
+  border: 1px solid rgba(255,255,255,0.12);
+  position: relative; overflow: hidden;
+  transition: var(--transition);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
+.bottle-liquid {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 40%;
+  background: var(--liquid-color, rgba(201,169,110,0.25));
+  transition: background 0.8s, height 0.6s;
+}
+.bottle-liquid::after {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6px;
+  background: rgba(255,255,255,0.15);
+  animation: liquidWave 4s ease-in-out infinite;
+}
+@keyframes liquidWave {
+  0%,100% { transform: scaleX(1) translateY(0); }
+  50% { transform: scaleX(1.03) translateY(-2px); }
+}
+.bottle-highlight {
+  position: absolute; top: 10px; left: 8px;
+  width: 8px; height: 60%; border-radius: 4px;
+  background: rgba(255,255,255,0.12);
+}
+.bottle-label-area {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+  text-align: center; width: 70px;
+}
+.bottle-label-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 8px; letter-spacing: 2px; text-transform: uppercase;
+  color: rgba(255,255,255,0.6); line-height: 1.4;
+}
+
+/* Glow effect */
+.bottle-glow {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  width: 140px; height: 200px; border-radius: 50%;
+  background: var(--glow-color, rgba(201,169,110,0.1));
+  filter: blur(30px); z-index: -1;
+  transition: background 0.8s;
+  pointer-events: none;
+}
+
+/* Profile card in preview */
+.profile-notes {
+  width: 100%; border-top: 1px solid var(--border);
+  padding-top: 1.5rem; margin-top: 0.5rem;
+}
+.profile-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0.5rem 0; border-bottom: 1px solid var(--border);
+  font-size: 11px;
+}
+.profile-row:last-child { border-bottom: none; }
+.profile-layer { color: var(--muted); letter-spacing: 1px; text-transform: uppercase; font-size: 9px; }
+.profile-note { color: var(--gold); font-weight: 400; }
+.profile-empty { color: rgba(255,255,255,0.2); font-style: italic; }
+
+/* Progress */
+.build-progress {
+  width: 100%; margin-bottom: 1.5rem;
+}
+.progress-bar-bg {
+  width: 100%; height: 2px; background: var(--border);
+  margin-top: 0.4rem;
+}
+.progress-bar-fill {
+  height: 2px; background: var(--gold);
+  transition: width 0.5s ease;
+  width: 0%;
+}
+.progress-label {
+  font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--muted); display: flex; justify-content: space-between;
+}
+
+/* CTA in panel */
+.find-btn {
+  width: 100%; margin-top: 1.5rem;
+  padding: 14px; border-radius: 2px; border: none;
+  background: var(--gold); color: var(--ink);
+  font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 500;
+  letter-spacing: 2.5px; text-transform: uppercase; cursor: pointer;
+  transition: var(--transition); opacity: 0.4; pointer-events: none;
+}
+.find-btn.ready { opacity: 1; pointer-events: all; }
+.find-btn.ready:hover { background: var(--gold2); transform: translateY(-1px); }
+
+/* ── RESULTS ──────────────────────────────────────── */
+.results-section {
+  padding: 5rem 2rem;
+  max-width: 1100px; margin: 0 auto;
+  display: none;
+}
+.results-section.visible { display: block; }
+
+.results-header {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  margin-bottom: 2.5rem; flex-wrap: wrap; gap: 1rem;
+}
+.results-back {
+  font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--muted); cursor: pointer; background: none; border: none;
+  font-family: 'DM Sans', sans-serif; transition: color 0.2s;
+  display: flex; align-items: center; gap: 6px;
+}
+.results-back:hover { color: var(--text); }
+
+.results-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1px; background: var(--border); }
+.result-card {
+  background: var(--ink2); padding: 2rem;
+  position: relative; overflow: hidden; cursor: pointer;
+  transition: background 0.3s;
+}
+.result-card:hover { background: var(--ink3); }
+.match-indicator {
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  transition: opacity 0.3s;
+}
+.result-icon-area {
+  width: 60px; height: 90px; margin-bottom: 1.5rem; position: relative;
+}
+.result-mini-bottle {
+  width: 50px; height: 80px;
+  border-radius: 4px;
+  position: relative; overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.result-mini-fill {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 55%;
+  transition: background 0.5s;
+}
+.result-mini-highlight {
+  position: absolute; top: 8px; left: 6px; width: 5px; height: 40%;
+  border-radius: 3px; background: rgba(255,255,255,0.15);
+}
+.result-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px; font-weight: 400; line-height: 1.2;
+  margin-bottom: 0.3rem;
+}
+.result-brand { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 1rem; }
+.result-match-label {
+  font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+  margin-bottom: 1.2rem; font-weight: 500;
+}
+.result-notes-row { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 1.4rem; }
+.result-note-tag {
+  font-size: 10px; padding: 3px 10px;
+  border: 1px solid var(--border); color: var(--muted);
+  border-radius: 2px; letter-spacing: 0.3px;
+}
+.result-footer { display: flex; align-items: center; justify-content: space-between; }
+.result-price { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 300; }
+.result-stars { font-size: 11px; color: var(--amz); }
+.result-stars small { color: var(--muted); font-size: 10px; margin-left: 4px; }
+.add-to-cart {
+  padding: 9px 20px; border-radius: 2px; border: none;
+  background: var(--amz); color: #111;
+  font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 500;
+  letter-spacing: 1px; text-transform: uppercase; cursor: pointer;
+  transition: var(--transition);
+}
+.add-to-cart:hover { opacity: 0.9; transform: translateY(-1px); }
+
+/* No match */
+.no-match-card {
+  background: var(--ink3); border: 1px solid var(--border);
+  padding: 4rem 2rem; text-align: center;
+  grid-column: 1/-1;
+}
+.no-match-card h3 { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 300; margin-bottom: 0.8rem; }
+.no-match-card p { font-size: 13px; color: var(--muted); margin-bottom: 2rem; }
+
+/* ── SCENT PYRAMID ────────────────────────────────── */
+.pyramid-section {
+  padding: 6rem 2rem;
+  background: linear-gradient(to bottom, var(--ink2), var(--ink));
+}
+.pyramid-inner { max-width: 900px; margin: 0 auto; text-align: center; }
+.pyramid-wrap { margin: 3rem 0; position: relative; }
+.pyramid-tier {
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 2px;
+  height: 70px;
+  position: relative;
+  clip-path: polygon(var(--clip));
+  transition: opacity 0.3s;
+}
+.pyramid-tier:hover { opacity: 0.85; }
+.tier-label {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 14px; font-weight: 400; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--ink);
+  position: relative; z-index: 1;
+}
+.tier-sub {
+  font-size: 10px; margin-left: 8px; opacity: 0.6;
+  position: relative; z-index: 1;
+}
+
+/* ── PERSONALISE ──────────────────────────────────── */
+.demo-section {
+  padding: 0 2rem 4rem;
+  max-width: 1100px; margin: 0 auto;
+}
+.demo-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--border); }
+.demo-card { background: var(--ink2); padding: 1.8rem 2rem; }
+.demo-card-label { font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 0.8rem; }
+.demo-card-title { font-family: 'Cormorant Garamond', serif; font-size: 16px; margin-bottom: 1rem; }
+.toggle-row { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+.toggle-btn {
+  padding: 7px 18px; border-radius: 2px;
+  border: 1px solid var(--border);
+  background: transparent; color: var(--muted);
+  font-family: 'DM Sans', sans-serif; font-size: 12px; cursor: pointer;
+  transition: var(--transition);
+}
+.toggle-btn:hover { border-color: rgba(255,255,255,0.3); color: var(--text); }
+.toggle-btn.active { border-color: var(--gold); color: var(--gold); background: rgba(201,169,110,0.08); }
+.age-input {
+  width: 100%; padding: 10px 14px; border-radius: 2px;
+  background: var(--ink3); border: 1px solid var(--border);
+  color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px;
+  outline: none; -moz-appearance: textfield;
+}
+.age-input::-webkit-outer-spin-button, .age-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+.age-input:focus { border-color: var(--gold); }
+
+/* ── FOOTER ───────────────────────────────────────── */
+.footer {
+  padding: 2rem;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  font-size: 11px; color: var(--muted); letter-spacing: 0.5px;
+}
+
+/* ── TOAST ────────────────────────────────────────── */
+.toast {
+  position: fixed; bottom: 2rem; right: 2rem; z-index: 200;
+  background: var(--surface); border: 1px solid var(--border);
+  padding: 1rem 1.5rem; border-radius: 2px;
+  font-size: 12px; color: var(--text);
+  transform: translateY(20px); opacity: 0;
+  transition: var(--transition); pointer-events: none;
+  display: flex; align-items: center; gap: 10px;
+  max-width: 280px;
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+.toast-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
+
+/* Responsive */
+@media (max-width: 800px) {
+  .builder-grid { grid-template-columns: 1fr; }
+  .preview-panel { position: static; }
+  .mood-grid { grid-template-columns: 1fr; }
+  .demo-grid { grid-template-columns: 1fr; }
+  .results-grid { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
 
 <!-- NAV -->
-<div class="nav">
-  <svg width="90" height="28" viewBox="0 0 603 182" fill="none">
-    <path d="M374 142c-35 26-85 40-129 40-61 0-116-22-157-60-3-3 0-7 4-5 45 26 100 41 157 41 38 0 81-8 120-24 6-3 11 4 5 8z" fill="#F90"/>
-    <path d="M389 125c-5-6-30-3-42-1-3 0-4-3-1-5 20-14 53-10 57-5s-1 39-20 56c-3 2-5 1-4-2 4-10 13-33 10-43z" fill="#F90"/>
-    <path d="M348 20V7c0-2 1-3 3-3h53c2 0 3 1 3 3v11c0 2-2 4-5 8l-27 39c10 0 21 1 30 6 2 1 3 3 3 5v14c0 2-2 5-5 3-19-10-45-11-66 0-2 1-4 0-4-3V77c0-3 0-7 2-10l32-45h-27c-2 0-3-1-3-3z" fill="#fff"/>
-    <path d="M124 92H99c-2 0-4-2-4-4V7c0-2 2-4 4-4h23c2 0 4 2 4 4v11h1c6-14 18-20 34-20 16 0 26 6 33 20C200 5 214-3 233-3c14 0 30 6 36 20 4 10 3 24 3 36v35c0 2-2 4-4 4h-24c-2 0-4-2-4-4V54c0-5 0-17-1-22-2-8-7-10-14-10-6 0-12 4-14 10-3 6-2 17-2 22v34c0 2-2 4-4 4h-24c-2 0-4-2-4-4V54c0-13 2-32-15-32-16 0-17 19-17 32v34c0 2-2 4-4 4z" fill="#fff"/>
-    <path d="M464-2c37 0 57 32 57 72 0 39-22 70-57 70-37 0-57-32-57-71 0-40 20-71 57-71zm0 26c-19 0-20 26-20 42s-1 44 20 44 21-27 21-43c0-11-1-24-4-34-3-9-9-9-17-9z" fill="#fff"/>
-    <path d="M555 92h-24c-2 0-4-2-4-4V7c0-2 2-4 4-4h22c2 0 3 1 3 3v12h1c5-12 13-19 26-19 15 0 23 6 29 19 5-13 14-19 27-19 8 0 18 3 23 11 6 9 5 21 5 33v35c0 2-2 4-4 4h-24c-2 0-4-2-4-4V53c0-13 2-32-15-32-6 0-13 4-15 11-3 7-2 17-2 24v32c0 2-2 4-4 4h-24c-2 0-4-2-4-4V53c0-13 3-33-15-33-17 0-17 20-17 33v35c-2 2-4 4-6 4z" fill="#fff"/>
-    <path d="M57 52c0 9 1 17-4 25-5 7-12 11-20 11-11 0-17-8-17-21C16 50 28 44 57 44v8zm25 40c-2 1-4 2-5 0-7-7-9-12-14-20-12 13-21 17-37 17-19 0-26-14-26-28 0-21 13-35 31-42 16-6 38-7 55-9v-3c0-6 0-13-3-18-3-4-8-6-14-6-9 0-18 5-20 15 0 2-2 4-4 4L11 0c-2 0-3-2-3-3C13-7 30-3 38-3h4c19 0 38 4 38 31v28c0 8 4 12 7 16 1 2 1 4 0 5l-5-5z" fill="#fff"/>
-  </svg>
-  <div class="nav-right">
-    <a href="fragrance-lab.html" style="color:#fff;font-weight:600;font-size:13px;text-decoration:none;">Fragrance Lab</a>
-    <span class="nav-sep" style="color:#555;margin:0 4px">|</span>
-    <a href="popular.html" style="color:#ccc;font-size:13px;text-decoration:none;">What's Popular?</a>
+<nav class="nav">
+  <div class="nav-logo">
+    <svg viewBox="0 0 603 182" fill="none">
+      <path d="M374 142c-35 26-85 40-129 40-61 0-116-22-157-60-3-3 0-7 4-5 45 26 100 41 157 41 38 0 81-8 120-24 6-3 11 4 5 8z" fill="#F90"/>
+      <path d="M389 125c-5-6-30-3-42-1-3 0-4-3-1-5 20-14 53-10 57-5s-1 39-20 56c-3 2-5 1-4-2 4-10 13-33 10-43z" fill="#F90"/>
+      <path d="M348 20V7c0-2 1-3 3-3h53c2 0 3 1 3 3v11c0 2-2 4-5 8l-27 39c10 0 21 1 30 6 2 1 3 3 3 5v14c0 2-2 5-5 3-19-10-45-11-66 0-2 1-4 0-4-3V77c0-3 0-7 2-10l32-45h-27c-2 0-3-1-3-3z" fill="#fff"/>
+      <path d="M124 92H99c-2 0-4-2-4-4V7c0-2 2-4 4-4h23c2 0 4 2 4 4v11h1c6-14 18-20 34-20 16 0 26 6 33 20C200 5 214-3 233-3c14 0 30 6 36 20 4 10 3 24 3 36v35c0 2-2 4-4 4h-24c-2 0-4-2-4-4V54c0-5 0-17-1-22-2-8-7-10-14-10-6 0-12 4-14 10-3 6-2 17-2 22v34c0 2-2 4-4 4h-24c-2 0-4-2-4-4V54c0-13 2-32-15-32-16 0-17 19-17 32v34c0 2-2 4-4 4z" fill="#fff"/>
+      <path d="M464-2c37 0 57 32 57 72 0 39-22 70-57 70-37 0-57-32-57-71 0-40 20-71 57-71zm0 26c-19 0-20 26-20 42s-1 44 20 44 21-27 21-43c0-11-1-24-4-34-3-9-9-9-17-9z" fill="#fff"/>
+    </svg>
   </div>
-</div>
+  <div class="nav-divider"></div>
+  <span class="nav-title">Fragrance Lab</span>
+  <div class="nav-right">
+    <a class="nav-link active" onclick="showSection('builder')">Discover</a>
+    <a class="nav-link" onclick="showSection('popular')">What's Popular</a>
+  </div>
+</nav>
 
 <!-- HERO -->
-<div class="hero" id="hero">
-  <div class="hero-inner">
-    <span class="hero-tag">Powered by L'Oréal</span>
-    <h1>Fragrance Lab</h1>
-    <p>Build your scent profile and discover the perfect fragrance — curated just for you.</p>
+<section class="hero" id="heroSection">
+  <div class="scent-cloud" id="scentCloud"></div>
+  <p class="hero-eyebrow">Amazon × L'Oréal · Fragrance Lab</p>
+  <h1 class="hero-title">Find your<br><em>signature</em><br>scent.</h1>
+  <p class="hero-subtitle">Tell us how you want to feel. We'll map the notes, build your profile, and match you with your perfect fragrance.</p>
+  <div class="hero-cta">
+    <button class="btn-primary" onclick="scrollToBuilder()">Begin Discovery</button>
+    <button class="btn-ghost" onclick="scrollToBuilder()">How It Works</button>
+  </div>
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- PERSONALISE -->
+<div class="demo-section" id="builderSection">
+  <div style="padding-top: 4rem; margin-bottom: 1px;">
+    <p class="section-label">Step 01</p>
+    <h2 class="section-title">Tell us about you</h2>
+    <p class="section-sub">Optional — helps personalise your results.</p>
+  </div>
+  <div class="demo-grid">
+    <div class="demo-card">
+      <div class="demo-card-label">Your Gender</div>
+      <div class="demo-card-title">How do you identify?</div>
+      <div class="toggle-row">
+        <button class="toggle-btn" id="demoM" onclick="setDemo('sex','M',this)">Male</button>
+        <button class="toggle-btn" id="demoF" onclick="setDemo('sex','F',this)">Female</button>
+        <button class="toggle-btn" id="demoX" onclick="setDemo('sex','X',this)">Non-binary</button>
+      </div>
+    </div>
+    <div class="demo-card">
+      <div class="demo-card-label">Your Age</div>
+      <div class="demo-card-title">How old are you?</div>
+      <input class="age-input" type="number" id="demoAge" min="1" max="120" placeholder="Enter age…">
+    </div>
   </div>
 </div>
 
-<!-- CONTENT -->
-<div class="content">
-  <div class="layout">
+<!-- MOOD SELECTOR -->
+<section class="mood-section">
+  <p class="section-label">Step 02</p>
+  <h2 class="section-title">Choose your mood</h2>
+  <p class="section-sub">What feeling are you reaching for?</p>
+  <div class="mood-grid" id="moodGrid"></div>
+</section>
 
-    <!-- LEFT: Bottle -->
-    <div class="left-col">
-      <div class="bottle-frame" id="bottleFrame">
-        <svg id="bottleSvg" viewBox="0 0 200 320" style="width:100%;max-width:180px;height:auto;transition:filter 0.6s ease">
-          <rect x="75" y="4" width="50" height="14" rx="4" class="accent-fill" opacity="0.45"/>
-          <rect x="70" y="18" width="60" height="22" rx="3" fill="#C0C0C0" opacity="0.7"/>
-          <rect x="70" y="18" width="60" height="22" rx="3" class="accent-fill" opacity="0.15"/>
-          <rect x="85" y="40" width="30" height="30" rx="2" fill="none" stroke="#C0C0C0" stroke-width="1.2" opacity="0.6"/>
-          <rect x="85" y="40" width="30" height="30" rx="2" class="accent-fill" opacity="0.04"/>
-          <rect x="32" y="70" width="136" height="220" rx="10" fill="none" stroke="#C0C0C0" stroke-width="1.5" opacity="0.6"/>
-          <rect x="32" y="70" width="136" height="220" rx="10" class="accent-fill" opacity="0.04"/>
-          <rect id="liquid" x="34" y="140" width="132" height="148" rx="9" class="accent-fill" opacity="0.08"/>
-          <rect x="42" y="78" width="18" height="160" rx="9" fill="#fff" opacity="0.18"/>
-          <rect x="60" y="180" width="80" height="60" rx="4" fill="#fff" opacity="0.45"/>
-          <text x="100" y="206" text-anchor="middle" font-size="8" font-family="Georgia,serif" class="accent-fill" opacity="0.6" font-weight="600">FRAGRANCE</text>
-          <text x="100" y="218" text-anchor="middle" font-size="6.5" font-family="Georgia,serif" class="accent-fill" opacity="0.45">LAB</text>
-          <line x1="72" y1="225" x2="128" y2="225" class="accent-stroke" stroke-width="0.4" opacity="0.3"/>
-          <text x="100" y="234" text-anchor="middle" font-size="5.5" font-family="Arial,sans-serif" class="accent-fill" opacity="0.35">L'ORÉAL</text>
-          <ellipse cx="100" cy="294" rx="50" ry="4" class="accent-fill" opacity="0.03"/>
-        </svg>
-      </div>
-      <div class="bottle-label" id="bottleLabel">Your Scent</div>
-
-      <div class="notes-summary" id="notesSummary">
-        <div class="notes-summary-title" id="notesSummaryTitle">Your Notes</div>
-        <div class="note-row" id="topNoteRow" style="display:none"><span class="icon" id="topNoteIcon"></span> <span class="label">Top:</span> <span class="value" id="topNoteVal"></span></div>
-        <div class="note-row" id="midNoteRow" style="display:none"><span class="icon" id="midNoteIcon"></span> <span class="label">Mid:</span> <span class="value" id="midNoteVal"></span></div>
-        <div class="note-row" id="baseNoteRow" style="display:none"><span class="icon" id="baseNoteIcon"></span> <span class="label">Base:</span> <span class="value" id="baseNoteVal"></span></div>
-      </div>
+<!-- NOTE BUILDER -->
+<section class="builder-section" id="noteBuilder">
+  <div class="builder-inner">
+    <div style="margin-bottom:3rem">
+      <p class="section-label">Step 03</p>
+      <h2 class="section-title">Compose your notes</h2>
+      <p class="section-sub">Select one from each layer to build your scent profile.</p>
     </div>
-
-    <!-- RIGHT: Quiz -->
-    <div class="right-col">
-      <!-- Quiz Card -->
-      <div class="card" id="quizCard">
-        <!-- Step 0: About You -->
-        <div class="section-hdr" style="margin-bottom:12px">
-          <div class="section-hdr-row"><div class="step-num" id="step0" style="background:#888">0</div><span>About You</span></div>
-          <div class="section-sub">Help us personalise your results</div>
+    <div class="builder-grid">
+      <div>
+        <!-- Fragrance Identity -->
+        <div class="note-layer">
+          <div class="layer-header">
+            <span class="layer-name">Fragrance Identity</span>
+            <span class="layer-hint">Whose skin are you dressing?</span>
+          </div>
+          <div class="notes-grid" id="genderRow"></div>
         </div>
-        <div class="demo-block">
-          <div class="demo-field">
-            <span class="demo-label">Your Gender</span>
-            <div class="demo-radio-row">
-              <button class="demo-radio-btn" id="demoM" onclick="setDemoGender('M')">♂ Male</button>
-              <button class="demo-radio-btn" id="demoF" onclick="setDemoGender('F')">♀ Female</button>
+
+        <!-- Top Notes -->
+        <div class="note-layer">
+          <div class="layer-header">
+            <span class="layer-name">Top Notes</span>
+            <span class="layer-hint">The first impression</span>
+            <span class="layer-timing">0–15 min</span>
+          </div>
+          <div class="notes-grid" id="topRow"></div>
+        </div>
+
+        <!-- Middle Notes -->
+        <div class="note-layer">
+          <div class="layer-header">
+            <span class="layer-name">Heart Notes</span>
+            <span class="layer-hint">The soul of the fragrance</span>
+            <span class="layer-timing">30 min–4 hrs</span>
+          </div>
+          <div class="notes-grid" id="midRow"></div>
+        </div>
+
+        <!-- Base Notes -->
+        <div class="note-layer">
+          <div class="layer-header">
+            <span class="layer-name">Base Notes</span>
+            <span class="layer-hint">What lingers long after</span>
+            <span class="layer-timing">4+ hrs</span>
+          </div>
+          <div class="notes-grid" id="baseRow"></div>
+        </div>
+      </div>
+
+      <!-- Sticky Preview Panel -->
+      <div class="preview-panel" id="previewPanel">
+        <p class="preview-label">Your Scent Profile</p>
+        <div class="build-progress">
+          <div class="progress-label">
+            <span>Profile Completion</span>
+            <span id="progressPct">0%</span>
+          </div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progressFill"></div>
+          </div>
+        </div>
+
+        <div class="bottle-wrap">
+          <div class="bottle-glow" id="bottleGlow"></div>
+          <div class="bottle">
+            <div class="bottle-cap" id="bottleCap"></div>
+            <div class="bottle-neck" id="bottleNeck"></div>
+            <div class="bottle-body" id="bottleBody">
+              <div class="bottle-liquid" id="bottleLiquid"></div>
+              <div class="bottle-highlight"></div>
+              <div class="bottle-label-area">
+                <div class="bottle-label-name" id="bottleLabelName">Fragrance<br>Lab</div>
+              </div>
             </div>
           </div>
-          <div class="demo-field">
-            <label class="demo-label" for="demoAge">Your Age</label>
-            <input class="demo-age-input" type="number" id="demoAge" min="1" max="120" placeholder="—" />
+        </div>
+
+        <div class="profile-notes">
+          <div class="profile-row">
+            <span class="profile-layer">Identity</span>
+            <span class="profile-note" id="profileGender"><span class="profile-empty">—</span></span>
+          </div>
+          <div class="profile-row">
+            <span class="profile-layer">Top</span>
+            <span class="profile-note" id="profileTop"><span class="profile-empty">—</span></span>
+          </div>
+          <div class="profile-row">
+            <span class="profile-layer">Heart</span>
+            <span class="profile-note" id="profileMid"><span class="profile-empty">—</span></span>
+          </div>
+          <div class="profile-row">
+            <span class="profile-layer">Base</span>
+            <span class="profile-note" id="profileBase"><span class="profile-empty">—</span></span>
           </div>
         </div>
-        <hr class="divider">
 
-        <!-- Step 1 -->
-        <div class="section-hdr"><div class="section-hdr-row"><div class="step-num" id="step1">1</div><span>Fragrance Identity</span></div><div class="section-sub">How do you want your scent to feel?</div></div>
-        <div class="pill-row" id="genderRow"></div>
-        <hr class="divider">
-
-        <!-- Step 2 -->
-        <div class="section-hdr"><div class="section-hdr-row"><div class="step-num" id="step2">2</div><span>Top Notes</span></div><div class="section-sub">The first impression — what hits in the opening 15 min</div></div>
-        <div class="pill-row" id="topRow"></div>
-
-        <!-- Step 3 -->
-        <div class="section-hdr"><div class="section-hdr-row"><div class="step-num" id="step3">3</div><span>Middle Notes</span></div><div class="section-sub">The heart — the character that defines the fragrance</div></div>
-        <div class="pill-row" id="midRow"></div>
-
-        <!-- Step 4 -->
-        <div class="section-hdr"><div class="section-hdr-row"><div class="step-num" id="step4">4</div><span>Base Notes</span></div><div class="section-sub">The lasting foundation — what lingers for hours</div></div>
-        <div class="pill-row" id="baseRow" style="margin-bottom:30px"></div>
-
-        <button class="cta" id="ctaBtn" disabled>Find Me a Fragrance</button>
-        <p class="cta-hint" id="ctaHint">Complete all four steps to unlock your match</p>
-      </div>
-
-      <!-- Results Card -->
-      <div class="card hidden" id="resultsCard">
-        <div class="results-hdr">
-          <h2 id="resultsTitle">Your Fragrance Match</h2>
-          <button class="btn-reset" id="resetBtn">Start Over</button>
-        </div>
-        <p class="results-sub" id="resultsSub"></p>
-        <div id="resultsBody"></div>
+        <button class="find-btn" id="findBtn" onclick="findMatches()">
+          Find My Fragrance →
+        </button>
       </div>
     </div>
   </div>
+</section>
 
-  <div class="footer"><span>Fragrance Lab by L'Oréal — An Amazon Interactive Experience</span></div>
+<!-- SCENT PYRAMID (educational) -->
+<section class="pyramid-section">
+  <div class="pyramid-inner">
+    <p class="section-label">The Science</p>
+    <h2 class="section-title">Understanding the Scent Pyramid</h2>
+    <p class="section-sub" style="max-width:520px;margin:0 auto">Every fragrance unfolds in three acts — each note layer evaporates at a different rate, revealing the full composition over time.</p>
+    <div class="pyramid-wrap">
+      <div class="pyramid-tier" style="width:40%;--clip:10% 0%,90% 0%,100% 100%,0% 100%;background:rgba(201,169,110,0.35)">
+        <span class="tier-label">Top Notes</span><span class="tier-sub">0–15 min</span>
+      </div>
+      <div class="pyramid-tier" style="width:65%;--clip:8% 0%,92% 0%,100% 100%,0% 100%;background:rgba(201,169,110,0.22)">
+        <span class="tier-label">Heart Notes</span><span class="tier-sub">30 min–4 hrs</span>
+      </div>
+      <div class="pyramid-tier" style="width:90%;--clip:5% 0%,95% 0%,100% 100%,0% 100%;background:rgba(201,169,110,0.12)">
+        <span class="tier-label">Base Notes</span><span class="tier-sub">4+ hrs</span>
+      </div>
+    </div>
+    <p style="font-size:12px;color:var(--muted);max-width:480px;margin:0 auto;line-height:1.7">Top notes create the first impression but fade fastest. The heart defines character. Base notes — sandalwood, vanilla, amber — anchor the composition and are what people remember.</p>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section class="results-section" id="resultsSection">
+  <div class="results-header">
+    <div>
+      <p class="section-label">Your Match</p>
+      <h2 class="section-title" id="resultsTitle">Your Fragrance Match</h2>
+      <p style="font-size:13px;color:var(--muted);margin-top:0.4rem" id="resultsSub"></p>
+    </div>
+    <button class="results-back" onclick="resetBuilder()">← Start Over</button>
+  </div>
+  <div class="results-grid" id="resultsGrid"></div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <span>Fragrance Lab by L'Oréal · An Amazon Interactive Experience · 2025</span>
+</footer>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <div class="toast-dot"></div>
+  <span id="toastMsg"></span>
 </div>
 
 <script>
-// ── Session timer ────────────────────────────────────────
-let _pageLoadTime = Date.now();
+// ── DATA ─────────────────────────────────────────────────────
+const FRAGRANCES_RAW = `Prada Paradigm,Masculine,Herbs & Spices,Woody,Sandalwood,$120.00,3.5
+Prada Paradoxe,Feminine,Citrus,Floral,Vanilla,$140.00,3.8
+Creed Aventus,Masculine,Fruits,Fresh,Sandalwood,$380.00,4.3
+Aqua di Gio,Masculine,Citrus,Fresh,Sandalwood,$98.00,4.0
+YSL MYSLF,Masculine,Fresh,Bourbon,Clean,$105.00,4.0
+Polo Earth,Masculine,Herbs & Spices,Woody,Sandalwood,$92.00,3.6
+Maison Margiela,Unisex,Fruits,Floral,Clean,$72.00,3.9
+YSL Libre,Feminine,Citrus,Floral,Vanilla,$130.00,3.9
+Valentino Born in Roma Donna,Feminine,Fruits,Floral,Vanilla,$160.00,3.9
+Valentino Born in Roma Uomo,Masculine,Fresh,Herbs & Spices,Woody,$102.00,3.8
+Lancôme Idôle,Feminine,Fruits,Floral,Vanilla,$124.00,3.8
+Azzaro Wanted,Masculine,Citrus,Fruits,Woody,$89.00,3.8
+Armani Stronger With You,Masculine,Amber,Fresh,Vanilla,$88.00,4.0
+Lancôme La Vie Est Belle,Feminine,Fruits,Floral,Vanilla,$120.00,4.1
+Viktor & Rolf Flowerbomb,Feminine,Citrus,Floral,Vanilla,$165.00,3.9
+Azzaro The Most Wanted,Masculine,Herbs & Spices,Gourmand,Woody,$89.00,4.6
+YSL Black Opium,Feminine,Fruits,Gourmand,Vanilla,$130.00,3.9
+YSL Mon Paris,Feminine,Fruits,Floral,Woody,$130.00,3.9
+Acqua di Gio Profondo,Masculine,Fresh,Herbs & Spices,Woody,$160.00,3.9
+Armani Code Parfum,Masculine,Citrus,Floral,Woody,$128.00,4.1
+Lancôme La Nuit Trésor,Feminine,Fruits,Floral,Vanilla,$120.00,4.1
+Viktor & Rolf Spicebomb,Masculine,Citrus,Herbs & Spices,Woody,$110.00,4.0
+Viktor & Rolf Spicebomb Extreme,Masculine,Herbs & Spices,Herbs & Spices,Vanilla,$140.00,4.4
+Armani Sì,Feminine,Citrus,Floral,Vanilla,$110.00,3.9
+Azzaro Wanted by Night,Masculine,Herbs & Spices,Woody,Vanilla,$89.00,4.2
+Prada Luna Rossa Ocean,Masculine,Fresh,Fresh,Woody,$98.00,3.7
+Lancôme Trésor,Feminine,Fruits,Floral,Vanilla,$112.00,4.1
+Aesop Hwyl,Unisex,Herbs & Spices,Woody,Woody,$195.00,4.1
+Maison Margiela Replica Jazz Club,Masculine,Herbs & Spices,Herbs & Spices,Vanilla,$72.00,4.0
+Orientica Royal Amber,Masculine,Amber,Woody,Woody,$140.00,4.3`;
 
-// ── CSV Loader ────────────────────────────────────────────
-let FRAGRANCES = [];
+const FRAGRANCES = FRAGRANCES_RAW.trim().split('\n').map(line => {
+  const [name, sex, top, mid, base, price, stars] = line.split(',');
+  return { name, sex: sex.toLowerCase(), top, mid, base, price: price.trim(), stars: parseFloat(stars) };
+});
 
-function parseCSV(text) {
-  const lines = text.trim().split("\n").map(l => l.replace(/\r$/, "")).filter(l => l.trim());
-  const headers = lines[0].split(",").map(h => h.trim().replace(/^\uFEFF/, ""));
-  return lines.slice(1).map(line => {
-    // Split on commas but keep quoted fields intact
-    const cols = [];
-    let cur = "", inQ = false;
-    for (const ch of line) {
-      if (ch === '"') { inQ = !inQ; }
-      else if (ch === "," && !inQ) { cols.push(cur.trim()); cur = ""; }
-      else { cur += ch; }
-    }
-    cols.push(cur.trim());
-    const row = {};
-    headers.forEach((h, i) => row[h] = (cols[i] || "").trim());
-    return row;
+const ICONS = {
+  'Citrus':'🍋','Herbs & Spices':'🌿','Amber':'🏵️','Fruits':'🍑',
+  'Floral':'🌸','Fresh':'💧','Spices':'🫚','Woody':'🪵',
+  'Bourbon':'🥃','Vanilla':'🍦','Sandalwood':'🪵','Clean':'🫧','Gourmand':'🍫'
+};
+
+const MOODS = [
+  { id:'fresh',   icon:'🌊', name:'Fresh & Clean',   desc:'Cool air, crisp mornings, the feeling just after rain on warm stone.', notes:['Fresh','Citrus'],    color:'#4A90B8' },
+  { id:'floral',  icon:'🌹', name:'Romantic & Floral',desc:'Petals at dusk, intimate warmth, something undeniably feminine.',      notes:['Floral','Fruits'],   color:'#C47B8A' },
+  { id:'woody',   icon:'🌲', name:'Earthy & Woody',   desc:'Forests at dawn, dry cedar, the grounding of ancient trees.',         notes:['Woody','Sandalwood'],color:'#8B6240' },
+  { id:'spicy',   icon:'🔥', name:'Bold & Spicy',     desc:'Confident swagger, dark corners, warmth that commands a room.',       notes:['Herbs & Spices','Amber'],color:'#C9623C' },
+  { id:'sweet',   icon:'✨', name:'Warm & Sweet',     desc:'Golden hour light, vanilla air, intimacy and comfort in a bottle.',   notes:['Vanilla','Bourbon'], color:'#C9A84C' },
+  { id:'unisex',  icon:'⚖️', name:'Unexpected & Fluid',desc:'No rules. Clean contradictions. A scent that belongs to no one — and everyone.', notes:['Clean','Gourmand'], color:'#7C6B9E' },
+];
+
+// ── STATE ─────────────────────────────────────────────────────
+let state = { gender: null, top: null, mid: null, base: null };
+let demo  = { sex: null };
+let mood  = null;
+const pageStart = Date.now();
+
+// ── SCENT CLOUD ───────────────────────────────────────────────
+function buildCloud() {
+  const cloud = document.getElementById('scentCloud');
+  const orbs = [
+    { w:600, x:60, y:10, tx:50, ty:40, sc:1.2, d:22, op:0.15, c:'201,169,110' },
+    { w:400, x:20, y:40, tx:-30, ty:20, sc:1.1, d:18, op:0.12, c:'74,144,184' },
+    { w:500, x:70, y:50, tx:40, ty:-30, sc:1.15, d:26, op:0.1, c:'196,123,138' },
+    { w:300, x:40, y:20, tx:-20, ty:40, sc:1.3, d:15, op:0.08, c:'124,107,158' },
+    { w:450, x:10, y:70, tx:60, ty:-20, sc:1.1, d:30, op:0.1, c:'139,98,64' },
+  ];
+  orbs.forEach(o => {
+    const el = document.createElement('div');
+    el.className = 'orb';
+    el.style.cssText = `
+      width:${o.w}px; height:${o.w}px;
+      left:${o.x}%; top:${o.y}%;
+      --tx:${o.tx}px; --ty:${o.ty}px; --sc:${o.sc}; --d:${o.d}s; --op:${o.op};
+      background:radial-gradient(circle, rgba(${o.c},0.5) 0%, transparent 70%);
+    `;
+    cloud.appendChild(el);
   });
 }
 
-function csvToFragrance(row) {
-  const ratingRaw = (row.stars || "0").split("/")[0].trim();
-  return {
-    name:        row.fragrance,
-    gender:      (row.sex || "unisex").toLowerCase(),
-    topNotes:    [row.top_notes],
-    middleNotes: [row.middle_notes],
-    baseNotes:   [row.base_notes],
-    price:       (row.price || "").trim(),
-    rating:      parseFloat(ratingRaw) || 0,
-    reviews:     0,
-  };
-}
-
-async function loadFragrances() {
-  try {
-    const resp = await fetch("fragrance_notes.csv");
-    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-    const text = await resp.text();
-    const rows = parseCSV(text);
-    FRAGRANCES = rows.filter(r => r.fragrance).map(csvToFragrance);
-  } catch (e) {
-    console.error("Could not load fragrance_notes.csv:", e);
-    document.body.innerHTML = `<div style="padding:40px;font-family:sans-serif;color:#c00">
-      <h2>Could not load fragrance data</h2>
-      <p>Make sure you are running this page from a local web server (e.g. <code>python -m http.server</code>) in the same folder as <strong>fragrance_notes.csv</strong>.</p>
-      <p>Error: ${e.message}</p>
-    </div>`;
-    return false;
-  }
-  return true;
-}
-
-const ICONS = {"Citrus":"🍋","Herbs & Spices":"🌿", "Amber": "🏵️","Fruits":"🍑","Floral":"🌸","Fresh":"💧","Spices":"🫚","Woody":"🪵","Bourbon":"🥃","Vanilla":"🍦","Sandalwood":"🪵","Clean":"🫧"};
-const ACCENTS = { masculine:"#232F3E", feminine:"#9B1B5A", unisex:"#3A6B35" };
-
-// ── State ────────────────────────────────────────────────
-let state = { gender:null, top:null, mid:null, base:null };
-let demo  = { sex:null, age:null };   // respondent demographics
-
-function accent() { return state.gender ? ACCENTS[state.gender] : "#232F3E"; }
-function allSelected() { return state.gender && state.top && state.mid && state.base; }
-
-// ── Demographic helpers ───────────────────────────────────
-function setDemoGender(val) {
-  demo.sex = val;
-  document.getElementById("demoM").classList.toggle("active", val === "M");
-  document.getElementById("demoF").classList.toggle("active", val === "F");
-}
-
-// ── Matching ─────────────────────────────────────────────
-function findMatches() {
-  const pool = FRAGRANCES.filter(f => state.gender === "unisex" ? true : f.gender === state.gender || f.gender === "unisex");
-  const scored = pool.map(f => {
-    let s = 0;
-    if (state.top && f.topNotes.includes(state.top)) s++;
-    if (state.mid && f.middleNotes.includes(state.mid)) s++;
-    if (state.base && f.baseNotes.includes(state.base)) s++;
-    return { ...f, score: s };
-  }).sort((a,b) => b.score - a.score || b.rating - a.rating);
-  const best = scored[0];
-  if (!best || best.score === 0) return { results:[], type:"none" };
-  if (best.score >= 2) return { results: scored.filter(s => s.score >= 2).slice(0,2), type:"strong" };
-  return { results:[best], type:"partial" };
-}
-
-// ── Pill builder ─────────────────────────────────────────
-function makePill(label, icon, group, color) {
-  const btn = document.createElement("button");
-  btn.className = "pill";
-  btn.innerHTML = (icon ? `<span class="icon">${icon}</span>` : "") + label;
-  btn.addEventListener("click", () => {
-    if (group === "gender") state[group] = label.toLowerCase();
-    else state[group] = label;
-    updateUI();
+// ── MOOD GRID ─────────────────────────────────────────────────
+function buildMoodGrid() {
+  const grid = document.getElementById('moodGrid');
+  MOODS.forEach(m => {
+    const card = document.createElement('div');
+    card.className = 'mood-card';
+    card.style.setProperty('--mood-color', m.color);
+    card.dataset.id = m.id;
+    card.innerHTML = `
+      <div class="mood-check">✓</div>
+      <span class="mood-icon">${m.icon}</span>
+      <div class="mood-name">${m.name}</div>
+      <div class="mood-desc">${m.desc}</div>
+    `;
+    card.addEventListener('click', () => selectMood(m.id));
+    grid.appendChild(card);
   });
+}
+
+function selectMood(id) {
+  mood = id;
+  document.querySelectorAll('.mood-card').forEach(c => c.classList.toggle('active', c.dataset.id === id));
+  const m = MOODS.find(x => x.id === id);
+  showToast(`${m.icon} Mood set: ${m.name}`);
+}
+
+// ── PILLS ─────────────────────────────────────────────────────
+function buildPills() {
+  const gR = document.getElementById('genderRow');
+  [['Masculine','♂','masculine'],['Feminine','♀','feminine'],['Unisex','⚥','unisex']].forEach(([l,ic,v]) => {
+    gR.appendChild(makePill(l, ic, 'gender', v));
+  });
+
+  const tops  = [...new Set(FRAGRANCES.map(f => f.top))].sort();
+  const mids  = [...new Set(FRAGRANCES.map(f => f.mid))].sort();
+  const bases = [...new Set(FRAGRANCES.map(f => f.base))].sort();
+
+  tops.forEach(n  => document.getElementById('topRow').appendChild(makePill(n, ICONS[n]||'🌸', 'top', n)));
+  mids.forEach(n  => document.getElementById('midRow').appendChild(makePill(n, ICONS[n]||'🌸', 'mid', n)));
+  bases.forEach(n => document.getElementById('baseRow').appendChild(makePill(n, ICONS[n]||'🌿', 'base', n)));
+}
+
+function makePill(label, icon, group, value) {
+  const btn = document.createElement('button');
+  btn.className = 'note-pill';
   btn.dataset.group = group;
-  btn.dataset.value = group === "gender" ? label.toLowerCase() : label;
-  if (color) btn.dataset.color = color;
+  btn.dataset.value = value;
+  btn.innerHTML = `<span class="note-emoji">${icon}</span>${label}`;
+  btn.addEventListener('click', () => selectNote(group, value, btn));
   return btn;
 }
 
-function uniqueSorted(arr) {
-  return [...new Set(arr.filter(Boolean))].sort();
+function selectNote(group, value, btn) {
+  state[group] = value;
+  document.querySelectorAll(`.note-pill[data-group="${group}"]`).forEach(p => p.classList.remove('selected'));
+  btn.classList.add('selected');
+  updatePreview();
 }
 
-function buildPills() {
-  const gR = document.getElementById("genderRow");
-  [["Masculine","♂","masculine"],["Feminine","♀","feminine"],["Unisex","⚥","unisex"]].forEach(([l,ic,g]) => {
-    gR.appendChild(makePill(l, ic, "gender", ACCENTS[g]));
-  });
+// ── PREVIEW ───────────────────────────────────────────────────
+const BOTTLE_COLORS = {
+  masculine: { liquid:'rgba(74,144,184,0.5)',  glow:'rgba(74,144,184,0.25)',  bg:'rgba(74,144,184,0.15)'  },
+  feminine:  { liquid:'rgba(196,123,138,0.5)', glow:'rgba(196,123,138,0.25)', bg:'rgba(196,123,138,0.15)' },
+  unisex:    { liquid:'rgba(124,107,158,0.5)', glow:'rgba(124,107,158,0.25)', bg:'rgba(124,107,158,0.15)' },
+};
+const DEFAULT_COLOR = { liquid:'rgba(201,169,110,0.35)', glow:'rgba(201,169,110,0.18)', bg:'rgba(201,169,110,0.12)' };
 
-  const topNotes    = uniqueSorted(FRAGRANCES.flatMap(f => f.topNotes));
-  const midNotes    = uniqueSorted(FRAGRANCES.flatMap(f => f.middleNotes));
-  const baseNotes   = uniqueSorted(FRAGRANCES.flatMap(f => f.baseNotes));
+function updatePreview() {
+  const total = 4;
+  const filled = ['gender','top','mid','base'].filter(k => state[k]).length;
+  const pct = Math.round(filled / total * 100);
 
-  const tR = document.getElementById("topRow");
-  topNotes.forEach(n => tR.appendChild(makePill(n, ICONS[n] || "🌸", "top")));
-  const mR = document.getElementById("midRow");
-  midNotes.forEach(n => mR.appendChild(makePill(n, ICONS[n] || "🌸", "mid")));
-  const bR = document.getElementById("baseRow");
-  baseNotes.forEach(n => bR.appendChild(makePill(n, ICONS[n] || "🌿", "base")));
-}
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressPct').textContent = pct + '%';
 
-// ── UI Update ────────────────────────────────────────────
-function updateUI() {
-  const ac = accent();
+  const colors = state.gender ? (BOTTLE_COLORS[state.gender] || DEFAULT_COLOR) : DEFAULT_COLOR;
+  document.getElementById('bottleLiquid').style.background = colors.liquid;
+  document.getElementById('bottleLiquid').style.height = (30 + filled * 12) + '%';
+  document.getElementById('bottleGlow').style.background = colors.glow;
+  document.getElementById('bottleBody').style.background = colors.bg;
+  document.getElementById('bottleNeck').style.background = colors.bg;
 
-  // pills
-  document.querySelectorAll(".pill").forEach(p => {
-    const g = p.dataset.group;
-    const v = p.dataset.value;
-    const sel = state[g] === v;
-    const c = p.dataset.color || ac;
-    p.classList.toggle("selected", sel);
-    p.style.borderColor = sel ? c : "#D5D9D9";
-    p.style.background = sel ? c + "14" : "#fff";
-    p.style.color = sel ? c : "#0F1111";
-    p.style.boxShadow = sel ? `0 2px 8px ${c}22` : "none";
-  });
-
-  // step numbers
-  ["step1","step2","step3","step4"].forEach(id => {
-    document.getElementById(id).style.background = ac;
-  });
-
-  // hero bg
-  document.getElementById("hero").style.background = `linear-gradient(135deg, ${ac}0C 0%, #fff 60%)`;
-
-  // bottle
-  const frame = document.getElementById("bottleFrame");
-  frame.style.background = `linear-gradient(180deg, #fff 0%, ${ac}06 100%)`;
-  frame.style.border = `1px solid ${ac}10`;
-  frame.style.boxShadow = allSelected() ? `0 8px 32px ${ac}18` : "0 2px 12px rgba(0,0,0,0.04)";
-
-  document.querySelectorAll(".accent-fill").forEach(el => el.setAttribute("fill", ac));
-  document.querySelectorAll(".accent-stroke").forEach(el => el.setAttribute("stroke", ac));
-
-  const liquid = document.getElementById("liquid");
-  if (allSelected()) {
-    if (!liquid.querySelector("animate")) {
-      const anim = document.createElementNS("http://www.w3.org/2000/svg","animate");
-      anim.setAttribute("attributeName","opacity");
-      anim.setAttribute("values","0.06;0.14;0.06");
-      anim.setAttribute("dur","3.5s");
-      anim.setAttribute("repeatCount","indefinite");
-      liquid.appendChild(anim);
-    }
-    document.getElementById("bottleSvg").style.filter = `drop-shadow(0 4px 20px ${ac}33)`;
-  } else {
-    const a = liquid.querySelector("animate");
-    if (a) a.remove();
-    document.getElementById("bottleSvg").style.filter = "none";
-  }
-
-  // bottle label
-  const lbl = document.getElementById("bottleLabel");
-  lbl.textContent = state.gender || "Your Scent";
-  lbl.style.color = ac;
-
-  // notes summary
-  const sum = document.getElementById("notesSummary");
-  const hasNotes = state.top || state.mid || state.base;
-  sum.classList.toggle("visible", !!hasNotes);
-  sum.style.border = `1px solid ${ac}15`;
-  document.getElementById("notesSummaryTitle").style.color = ac;
-
-  function setNoteRow(id, iconId, valId, val) {
-    const row = document.getElementById(id);
-    if (val) { row.style.display = "flex"; document.getElementById(iconId).textContent = ICONS[val]||""; document.getElementById(valId).textContent = val; }
-    else row.style.display = "none";
-  }
-  setNoteRow("topNoteRow","topNoteIcon","topNoteVal", state.top);
-  setNoteRow("midNoteRow","midNoteIcon","midNoteVal", state.mid);
-  setNoteRow("baseNoteRow","baseNoteIcon","baseNoteVal", state.base);
-
-  // CTA
-  const cta = document.getElementById("ctaBtn");
-  const hint = document.getElementById("ctaHint");
-  if (allSelected()) { cta.disabled = false; cta.classList.add("active"); hint.style.display = "none"; }
-  else { cta.disabled = true; cta.classList.remove("active"); hint.style.display = "block"; }
-}
-
-// ── Stars HTML ───────────────────────────────────────────
-function starsHTML(rating, reviews) {
-  const pct = (rating / 5) * 100;
-  const countHTML = reviews > 0 ? `<span class="stars-count">${reviews.toLocaleString()}</span>` : "";
-  return `<div class="stars-row"><span class="stars-bg">★★★★★<span class="stars-fill" style="width:${pct}%">★★★★★</span></span>${countHTML}</div>`;
-}
-
-// ── Small bottle SVG ─────────────────────────────────────
-function smallBottleSVG(ac) {
-  return `<svg viewBox="0 0 40 64" width="36" height="56"><rect x="15" y="1" width="10" height="5" rx="1.5" fill="#bbb"/><rect x="13" y="6" width="14" height="4" rx="1" fill="#ccc"/><rect x="17" y="10" width="6" height="6" rx="1" fill="none" stroke="#ccc" stroke-width="0.6"/><rect x="6" y="16" width="28" height="44" rx="4" fill="none" stroke="#ccc" stroke-width="1"/><rect x="6" y="16" width="28" height="44" rx="4" fill="${ac}" opacity="0.08"/><rect x="7" y="32" width="26" height="27" rx="3" fill="${ac}" opacity="0.1"/></svg>`;
-}
-
-// ── Result card HTML ─────────────────────────────────────
-function resultCardHTML(f) {
-  const ac = accent();
-  const tags = [...f.topNotes,...f.middleNotes,...f.baseNotes].map(n => `<span class="note-tag">${ICONS[n]||""} ${n}</span>`).join("");
-  const badgeBg = f.score===3 ? "#067D62" : f.score===2 ? "#FF9900" : "#888";
-  const badgeTxt = f.score===3 ? "✓ Perfect Match" : f.score===2 ? "Strong Match" : "Partial Match";
-  return `<div class="result-card">
-    <div class="result-icon" style="background:linear-gradient(135deg,${ac}08,${ac}14);border:1px solid ${ac}12">${smallBottleSVG(ac)}</div>
-    <div class="result-body">
-      <div class="result-name">${f.name}</div>
-      ${starsHTML(f.rating, f.reviews)}
-      <div class="note-tags">${tags}</div>
-      <div class="result-price">${f.price}</div>
-      <div class="result-actions">
-        <button class="btn-cart">Add to Cart</button>
-        <button class="btn-details">See Details</button>
-        <span class="match-badge" style="background:${badgeBg}">${badgeTxt}</span>
-      </div>
-    </div>
-  </div>`;
-}
-
-// ── Data logger ──────────────────────────────────────────
-async function logSearch() {
-  const age     = document.getElementById("demoAge").value.trim();
-  const elapsed = Math.round((Date.now() - _pageLoadTime) / 1000);
-  const payload = {
-    respondent_sex:    demo.sex       || "",
-    respondent_age:    age            || "",
-    fragrance_gender:  state.gender   || "",
-    top_note:          state.top      || "",
-    middle_note:       state.mid      || "",
-    base_note:         state.base     || "",
-    time_on_page_sec:  elapsed,
+  const setProfile = (id, val) => {
+    const el = document.getElementById(id);
+    el.innerHTML = val ? val : '<span class="profile-empty">—</span>';
   };
+  setProfile('profileGender', state.gender);
+  setProfile('profileTop',    state.top);
+  setProfile('profileMid',    state.mid);
+  setProfile('profileBase',   state.base);
+
+  const ready = filled === 4;
+  const btn = document.getElementById('findBtn');
+  btn.classList.toggle('ready', ready);
+  if (state.gender) document.getElementById('bottleLabelName').textContent = state.gender.charAt(0).toUpperCase() + state.gender.slice(1) + '\nFragrance';
+}
+
+// ── MATCHING ──────────────────────────────────────────────────
+function findMatches() {
+  logSearch();
+  const genderMap = { masculine:['masculine','unisex'], feminine:['feminine','unisex'], unisex:['masculine','feminine','unisex'] };
+  const allowed = genderMap[state.gender] || ['masculine','feminine','unisex'];
+
+  const scored = FRAGRANCES
+    .filter(f => allowed.includes(f.sex))
+    .map(f => {
+      let score = 0;
+      if (f.top === state.top) score++;
+      if (f.mid === state.mid) score++;
+      if (f.base === state.base) score++;
+      return { ...f, score };
+    })
+    .filter(f => f.score > 0)
+    .sort((a,b) => b.score - a.score || b.stars - a.stars);
+
+  renderResults(scored);
+  document.getElementById('resultsSection').classList.add('visible');
+  document.getElementById('resultsSection').scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+// ── RENDER RESULTS ────────────────────────────────────────────
+function renderResults(matches) {
+  const grid = document.getElementById('resultsGrid');
+  grid.innerHTML = '';
+
+  const title = document.getElementById('resultsTitle');
+  const sub   = document.getElementById('resultsSub');
+
+  if (matches.length === 0) {
+    title.textContent = 'No exact match found';
+    sub.textContent = 'Try adjusting your notes — a slight change opens new possibilities.';
+    grid.innerHTML = `
+      <div class="no-match-card">
+        <h3>No match for this combination</h3>
+        <p>Your scent profile is unique — the catalog doesn't have a direct hit.<br>Try changing one note and we'll find something close.</p>
+        <button class="btn-primary" onclick="resetBuilder()">Rebuild Profile</button>
+      </div>`;
+    return;
+  }
+
+  title.textContent = matches[0].score === 3 ? 'Your perfect match' : 'Your closest matches';
+  sub.textContent   = `Found ${matches.length} fragrance${matches.length > 1 ? 's' : ''} that align with your scent profile.`;
+
+  const topScore = matches[0].score;
+  matches.slice(0, 6).forEach((f, i) => {
+    const colors = BOTTLE_COLORS[f.sex] || DEFAULT_COLOR;
+    const matchLabel = f.score === 3 ? { text:'Perfect Match', color:'#c9a96e' }
+                     : f.score === 2 ? { text:'Strong Match',  color:'#4A90B8' }
+                     :                  { text:'Partial Match', color:'#666'    };
+    const starsHtml = '★'.repeat(Math.floor(f.stars)) + (f.stars % 1 >= 0.5 ? '½' : '');
+    const brand = f.name.split(' ').slice(0,1).join(' ');
+
+    const card = document.createElement('div');
+    card.className = 'result-card';
+    card.style.animationDelay = `${i * 0.08}s`;
+    card.innerHTML = `
+      <div class="match-indicator" style="background:${matchLabel.color}"></div>
+      <div class="result-icon-area">
+        <div class="result-mini-bottle" style="background:${colors.bg}">
+          <div class="result-mini-fill" style="background:${colors.liquid}"></div>
+          <div class="result-mini-highlight"></div>
+        </div>
+      </div>
+      <div class="result-brand">${brand}</div>
+      <div class="result-name">${f.name.replace(brand, '').trim() || f.name}</div>
+      <div class="result-match-label" style="color:${matchLabel.color}">${matchLabel.text}</div>
+      <div class="result-notes-row">
+        <span class="result-note-tag">${ICONS[f.top]||''} ${f.top}</span>
+        <span class="result-note-tag">${ICONS[f.mid]||''} ${f.mid}</span>
+        <span class="result-note-tag">${ICONS[f.base]||''} ${f.base}</span>
+      </div>
+      <div class="result-footer">
+        <div>
+          <div class="result-price">${f.price}</div>
+          <div class="result-stars">${starsHtml} <small>${f.stars}/5</small></div>
+        </div>
+        <button class="add-to-cart" onclick="addToCart('${f.name.replace(/'/g,"\\'")}', '${f.price}')">Add to Cart</button>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+// ── LOGGER ────────────────────────────────────────────────────
+async function logSearch() {
   try {
-    await fetch("/log", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
+    await fetch('/log', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        respondent_sex:   demo.sex || '',
+        respondent_age:   document.getElementById('demoAge').value || '',
+        fragrance_gender: state.gender || '',
+        top_note:         state.top    || '',
+        middle_note:      state.mid    || '',
+        base_note:        state.base   || '',
+        time_on_page_sec: Math.round((Date.now()-pageStart)/1000),
+      })
     });
-  } catch (e) {
-    console.warn("Logging failed (is log_server.py running?):", e.message);
-  }
+  } catch(e) { /* silent */ }
 }
 
-// ── Show results ─────────────────────────────────────────
-function showResults() {
-  logSearch();   // fire-and-forget; does not block the UI
-  const match = findMatches();
-  document.getElementById("quizCard").classList.add("hidden");
-  const rc = document.getElementById("resultsCard");
-  rc.classList.remove("hidden");
-
-  if (match.type === "none") {
-    document.getElementById("resultsTitle").textContent = "No Matches Found";
-    document.getElementById("resultsSub").textContent = "";
-    document.getElementById("resultsBody").innerHTML = `<div class="no-match"><div class="emoji">🔄</div><h3>Alter Criteria</h3><p>No fragrance matched your combination. Try adjusting your notes.</p><button class="btn-retry" onclick="resetQuiz()">Try Again</button></div>`;
-  } else {
-    document.getElementById("resultsTitle").textContent = "Your Fragrance Match";
-    document.getElementById("resultsSub").textContent = match.type === "strong"
-      ? (match.results.length === 1 ? "We found a strong match for your scent profile." : "We found strong matches for your scent profile.")
-      : "Here's the closest match based on your preferences.";
-    document.getElementById("resultsBody").innerHTML = match.results.map(resultCardHTML).join("");
-  }
+// ── HELPERS ───────────────────────────────────────────────────
+function setDemo(field, val, btn) {
+  demo[field] = val;
+  btn.closest('.toggle-row').querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
 }
 
-// ── Reset ────────────────────────────────────────────────
-function resetQuiz() {
+function addToCart(name, price) {
+  showToast(`🛒 ${name} added to cart`);
+}
+
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+function scrollToBuilder() {
+  document.getElementById('builderSection').scrollIntoView({ behavior:'smooth' });
+}
+
+function resetBuilder() {
   state = { gender:null, top:null, mid:null, base:null };
-  demo  = { sex:null, age:null };
-  _pageLoadTime = Date.now();   // restart timer for the new attempt
-  document.getElementById("demoM").classList.remove("active");
-  document.getElementById("demoF").classList.remove("active");
-  document.getElementById("demoAge").value = "";
-  document.getElementById("resultsCard").classList.add("hidden");
-  document.getElementById("quizCard").classList.remove("hidden");
-  updateUI();
+  document.querySelectorAll('.note-pill').forEach(p => p.classList.remove('selected'));
+  document.getElementById('resultsSection').classList.remove('visible');
+  document.getElementById('progressFill').style.width = '0%';
+  document.getElementById('progressPct').textContent = '0%';
+  ['profileGender','profileTop','profileMid','profileBase'].forEach(id => {
+    document.getElementById(id).innerHTML = '<span class="profile-empty">—</span>';
+  });
+  document.getElementById('findBtn').classList.remove('ready');
+  const dc = BOTTLE_COLORS.masculine;
+  document.getElementById('bottleLiquid').style.background = DEFAULT_COLOR.liquid;
+  document.getElementById('bottleLiquid').style.height = '30%';
+  document.getElementById('bottleGlow').style.background = DEFAULT_COLOR.glow;
+  document.getElementById('bottleBody').style.background = DEFAULT_COLOR.bg;
+  document.getElementById('noteBuilder').scrollIntoView({ behavior:'smooth' });
 }
 
-// ── Init ─────────────────────────────────────────────────
-(async () => {
-  const ok = await loadFragrances();
-  if (!ok) return;
-  buildPills();
-  updateUI();
-  document.getElementById("ctaBtn").addEventListener("click", showResults);
-  document.getElementById("resetBtn").addEventListener("click", resetQuiz);
-})()
+function showSection(sec) {
+  if (sec === 'popular') {
+    window.location.href = 'popular.html';
+  }
+}
+
+// ── INIT ──────────────────────────────────────────────────────
+buildCloud();
+buildMoodGrid();
+buildPills();
+updatePreview();
 </script>
 </body>
 </html>

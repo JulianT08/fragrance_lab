@@ -32,3 +32,5 @@ id,timestamp,respondent_sex,respondent_age,fragrance_gender,,top_note,middle_not
 31,2026-03-04 14:45:35,127.0.0.1,M,,masculine,Herbs & Spices,Woody,Woody,87
 32,2026-03-04 14:47:49,127.0.0.1,M,,feminine,Citrus,Fruits,Clean,9
 33,2026-03-04 14:48:55,127.0.0.1,M,,masculine,Fresh,Gourmand,Vanilla,48
+34,2026-03-05 11:13:14,10.51.21.251,F,18,feminine,Citrus,Gourmand,Vanilla,20
+35,2026-03-05 11:13:35,10.51.21.251,F,18,feminine,Amber,Fresh,Vanilla,13
