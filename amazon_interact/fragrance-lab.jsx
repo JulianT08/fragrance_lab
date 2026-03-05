@@ -101,11 +101,6 @@ function Stars({ rating, reviews }) {
   );
 }
 
-const noteIcons = {
-  "Citrus": "🍋", "Herbs & Spices": "🌿", "Fruits": "🍑", "Floral": "🌸", "Fresh": "💧",
-  "Spices": "🫚", "Woody": "🪵", "Bourbon": "🥃",
-  "Vanilla": "🍦", "Sandalwood": "🪵", "Clean": "🫧",
-};
 
 export default function FragranceLab() {
   const [gender, setGender] = useState(null);
@@ -186,7 +181,7 @@ export default function FragranceLab() {
           <Stars rating={frag.rating} reviews={frag.reviews} />
           <div style={{ fontSize: 12, color: "#565959", marginTop: 5, display: "flex", gap: 6, flexWrap: "wrap" }}>
             {[...frag.topNotes, ...frag.middleNotes, ...frag.baseNotes].map((n,i) => (
-              <span key={i} style={{ background: "#f0f0f0", padding: "2px 8px", borderRadius: 10, fontSize: 11 }}>{noteIcons[n] || ""} {n}</span>
+              <span key={i} style={{ background: "#f0f0f0", padding: "2px 8px", borderRadius: 10, fontSize: 11 }}>{n}</span>
             ))}
           </div>
           <div style={{ fontSize: 18, fontWeight: 700, color: "#0F1111", marginTop: 8 }}>{frag.price}</div>
@@ -267,13 +262,13 @@ export default function FragranceLab() {
               }}>
                 <div style={{ fontSize: 10, textTransform: "uppercase", letterSpacing: 1.5, color: accent, fontWeight: 700, marginBottom: 8 }}>Your Notes</div>
                 {topNote && <div style={{ fontSize: 12, color: "#565959", marginBottom: 4, display: "flex", alignItems: "center", gap: 6 }}>
-                  <span style={{ fontSize: 14 }}>{noteIcons[topNote]}</span> <span style={{ color: "#888", fontSize: 11 }}>Top:</span> <span style={{ color: "#0F1111", fontWeight: 500 }}>{topNote}</span>
+                  <span style={{ color: "#888", fontSize: 11 }}>Top:</span> <span style={{ color: "#0F1111", fontWeight: 500 }}>{topNote}</span>
                 </div>}
                 {midNote && <div style={{ fontSize: 12, color: "#565959", marginBottom: 4, display: "flex", alignItems: "center", gap: 6 }}>
-                  <span style={{ fontSize: 14 }}>{noteIcons[midNote]}</span> <span style={{ color: "#888", fontSize: 11 }}>Mid:</span> <span style={{ color: "#0F1111", fontWeight: 500 }}>{midNote}</span>
+                  <span style={{ color: "#888", fontSize: 11 }}>Mid:</span> <span style={{ color: "#0F1111", fontWeight: 500 }}>{midNote}</span>
                 </div>}
                 {baseNote && <div style={{ fontSize: 12, color: "#565959", display: "flex", alignItems: "center", gap: 6 }}>
-                  <span style={{ fontSize: 14 }}>{noteIcons[baseNote]}</span> <span style={{ color: "#888", fontSize: 11 }}>Base:</span> <span style={{ color: "#0F1111", fontWeight: 500 }}>{baseNote}</span>
+                  <span style={{ color: "#888", fontSize: 11 }}>Base:</span> <span style={{ color: "#0F1111", fontWeight: 500 }}>{baseNote}</span>
                 </div>}
               </div>
             )}
@@ -293,17 +288,17 @@ export default function FragranceLab() {
 
                 <SectionLabel step="2" label="Top Notes" sub="The first impression — what hits in the opening 15 min" />
                 <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 26 }}>
-                  {topOptions.map((n) => <Pill key={n} label={n} icon={noteIcons[n]} selected={topNote === n} onClick={() => setTopNote(n)} />)}
+                  {topOptions.map((n) => <Pill key={n} label={n} selected={topNote === n} onClick={() => setTopNote(n)} />)}
                 </div>
 
                 <SectionLabel step="3" label="Middle Notes" sub="The heart — the character that defines the fragrance" />
                 <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 26 }}>
-                  {midOptions.map((n) => <Pill key={n} label={n} icon={noteIcons[n]} selected={midNote === n} onClick={() => setMidNote(n)} />)}
+                  {midOptions.map((n) => <Pill key={n} label={n} selected={midNote === n} onClick={() => setMidNote(n)} />)}
                 </div>
 
                 <SectionLabel step="4" label="Base Notes" sub="The lasting foundation — what lingers for hours" />
                 <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 30 }}>
-                  {baseOptions.map((n) => <Pill key={n} label={n} icon={noteIcons[n]} selected={baseNote === n} onClick={() => setBaseNote(n)} />)}
+                  {baseOptions.map((n) => <Pill key={n} label={n} selected={baseNote === n} onClick={() => setBaseNote(n)} />)}
                 </div>
 
                 <button onClick={handleFind} disabled={!allSelected} style={{
@@ -330,7 +325,6 @@ export default function FragranceLab() {
                 </div>
                 {results.type === "none" ? (
                   <div style={{ textAlign: "center", padding: "44px 20px", background: "#FFF8E1", borderRadius: 10, border: "1px solid #FFE0B2" }}>
-                    <div style={{ fontSize: 40, marginBottom: 14 }}>🔄</div>
                     <p style={{ fontSize: 16, fontWeight: 600, color: "#0F1111", margin: "0 0 6px 0" }}>Alter Criteria</p>
                     <p style={{ fontSize: 13, color: "#565959", margin: "0 0 18px 0" }}>No fragrance matched your combination. Try adjusting your notes.</p>
                     <button onClick={handleReset} style={{ padding: "10px 32px", borderRadius: 22, border: "none", background: "linear-gradient(to bottom, #F7DFA5, #F0C14B)", color: "#111", fontSize: 14, fontWeight: 600, cursor: "pointer" }}>Try Again</button>
