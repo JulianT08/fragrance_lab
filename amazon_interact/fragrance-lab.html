@@ -1019,7 +1019,7 @@ function renderResults(matches) {
 // ── LOGGER ────────────────────────────────────────────────────
 async function logSearch() {
   try {
-    await fetch('/log', {
+    const resp = await fetch('/log', {
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify({
@@ -1032,7 +1032,8 @@ async function logSearch() {
         time_on_page_sec: Math.round((Date.now()-pageStart)/1000),
       })
     });
-  } catch(e) { /* silent */ }
+    if (!resp.ok) console.warn('[Fragrance Lab] Log failed:', resp.status);
+  } catch(e) { console.warn('[Fragrance Lab] Log error:', e.message); }
 }
 
 // ── HELPERS ───────────────────────────────────────────────────
