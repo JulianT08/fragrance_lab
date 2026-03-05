@@ -789,19 +789,15 @@ const FRAGRANCES = FRAGRANCES_RAW.trim().split('\n').map(line => {
   return { name, sex: sex.toLowerCase(), top, mid, base, price: price.trim(), stars: parseFloat(stars) };
 });
 
-const ICONS = {
-  'Citrus':'🍋','Herbs & Spices':'🌿','Amber':'🏵️','Fruits':'🍑',
-  'Floral':'🌸','Fresh':'💧','Spices':'🫚','Woody':'🪵',
-  'Bourbon':'🥃','Vanilla':'🍦','Sandalwood':'🪵','Clean':'🫧','Gourmand':'🍫'
-};
+const ICONS = {};
 
 const MOODS = [
-  { id:'fresh',   icon:'🌊', name:'Fresh & Clean',   desc:'Cool air, crisp mornings, the feeling just after rain on warm stone.', notes:['Fresh','Citrus'],    color:'#4A90B8' },
-  { id:'floral',  icon:'🌹', name:'Romantic & Floral',desc:'Petals at dusk, intimate warmth, something undeniably feminine.',      notes:['Floral','Fruits'],   color:'#C47B8A' },
-  { id:'woody',   icon:'🌲', name:'Earthy & Woody',   desc:'Forests at dawn, dry cedar, the grounding of ancient trees.',         notes:['Woody','Sandalwood'],color:'#8B6240' },
-  { id:'spicy',   icon:'🔥', name:'Bold & Spicy',     desc:'Confident swagger, dark corners, warmth that commands a room.',       notes:['Herbs & Spices','Amber'],color:'#C9623C' },
-  { id:'sweet',   icon:'✨', name:'Warm & Sweet',     desc:'Golden hour light, vanilla air, intimacy and comfort in a bottle.',   notes:['Vanilla','Bourbon'], color:'#C9A84C' },
-  { id:'unisex',  icon:'⚖️', name:'Unexpected & Fluid',desc:'No rules. Clean contradictions. A scent that belongs to no one — and everyone.', notes:['Clean','Gourmand'], color:'#7C6B9E' },
+  { id:'fresh',   name:'Fresh & Clean',    desc:'Cool air, crisp mornings, the feeling just after rain on warm stone.', notes:['Fresh','Citrus'],    color:'#4A90B8' },
+  { id:'floral',  name:'Romantic & Floral',desc:'Petals at dusk, intimate warmth, something undeniably feminine.',      notes:['Floral','Fruits'],   color:'#C47B8A' },
+  { id:'woody',   name:'Earthy & Woody',   desc:'Forests at dawn, dry cedar, the grounding of ancient trees.',         notes:['Woody','Sandalwood'],color:'#8B6240' },
+  { id:'spicy',   name:'Bold & Spicy',     desc:'Confident swagger, dark corners, warmth that commands a room.',       notes:['Herbs & Spices','Amber'],color:'#C9623C' },
+  { id:'sweet',   name:'Warm & Sweet',     desc:'Golden hour light, vanilla air, intimacy and comfort in a bottle.',   notes:['Vanilla','Bourbon'], color:'#C9A84C' },
+  { id:'unisex',  name:'Unexpected & Fluid',desc:'No rules. Clean contradictions. A scent that belongs to no one — and everyone.', notes:['Clean','Gourmand'], color:'#7C6B9E' },
 ];
 
 // ── STATE ─────────────────────────────────────────────────────
@@ -842,8 +838,7 @@ function buildMoodGrid() {
     card.style.setProperty('--mood-color', m.color);
     card.dataset.id = m.id;
     card.innerHTML = `
-      <div class="mood-check">✓</div>
-      <span class="mood-icon">${m.icon}</span>
+      <div class="mood-check">&#10003;</div>
       <div class="mood-name">${m.name}</div>
       <div class="mood-desc">${m.desc}</div>
     `;
@@ -856,7 +851,7 @@ function selectMood(id) {
   mood = id;
   document.querySelectorAll('.mood-card').forEach(c => c.classList.toggle('active', c.dataset.id === id));
   const m = MOODS.find(x => x.id === id);
-  showToast(`${m.icon} Mood set: ${m.name}`);
+  showToast(`Mood set: ${m.name}`);
 }
 
 // ── PILLS ─────────────────────────────────────────────────────
@@ -870,9 +865,9 @@ function buildPills() {
   const mids  = [...new Set(FRAGRANCES.map(f => f.mid))].sort();
   const bases = [...new Set(FRAGRANCES.map(f => f.base))].sort();
 
-  tops.forEach(n  => document.getElementById('topRow').appendChild(makePill(n, ICONS[n]||'🌸', 'top', n)));
-  mids.forEach(n  => document.getElementById('midRow').appendChild(makePill(n, ICONS[n]||'🌸', 'mid', n)));
-  bases.forEach(n => document.getElementById('baseRow').appendChild(makePill(n, ICONS[n]||'🌿', 'base', n)));
+  tops.forEach(n  => document.getElementById('topRow').appendChild(makePill(n, '', 'top', n)));
+  mids.forEach(n  => document.getElementById('midRow').appendChild(makePill(n, '', 'mid', n)));
+  bases.forEach(n => document.getElementById('baseRow').appendChild(makePill(n, '', 'base', n)));
 }
 
 function makePill(label, icon, group, value) {
@@ -880,7 +875,7 @@ function makePill(label, icon, group, value) {
   btn.className = 'note-pill';
   btn.dataset.group = group;
   btn.dataset.value = value;
-  btn.innerHTML = `<span class="note-emoji">${icon}</span>${label}`;
+  btn.innerHTML = `${icon ? `<span class="note-emoji">${icon}</span>` : ''}${label}`;
   btn.addEventListener('click', () => selectNote(group, value, btn));
   return btn;
 }
@@ -1000,9 +995,9 @@ function renderResults(matches) {
       <div class="result-name">${f.name.replace(brand, '').trim() || f.name}</div>
       <div class="result-match-label" style="color:${matchLabel.color}">${matchLabel.text}</div>
       <div class="result-notes-row">
-        <span class="result-note-tag">${ICONS[f.top]||''} ${f.top}</span>
-        <span class="result-note-tag">${ICONS[f.mid]||''} ${f.mid}</span>
-        <span class="result-note-tag">${ICONS[f.base]||''} ${f.base}</span>
+        <span class="result-note-tag">${f.top}</span>
+        <span class="result-note-tag">${f.mid}</span>
+        <span class="result-note-tag">${f.base}</span>
       </div>
       <div class="result-footer">
         <div>
@@ -1044,7 +1039,7 @@ function setDemo(field, val, btn) {
 }
 
 function addToCart(name, price) {
-  showToast(`🛒 ${name} added to cart`);
+  showToast(`${name} added to cart`);
 }
 
 let toastTimer;
