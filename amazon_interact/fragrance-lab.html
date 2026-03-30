@@ -162,7 +162,7 @@ body {
   background: var(--mood-color, var(--gold));
   opacity: 0; transition: opacity 0.4s;
 }
-.mood-card:hover::before, .mood-card.active::before { opacity: 0.07; }
+.mood-card:hover::before, .mood-card.active::before { opacity: 0.18; }
 .mood-card.active { background: var(--ink3); }
 .mood-card.active .mood-icon { transform: scale(1.15); }
 .mood-icon {
@@ -183,6 +183,16 @@ body {
   font-size: 10px; color: var(--ink);
 }
 .mood-card.active .mood-check { display: flex; }
+
+/* ── MOOD BURST OVERLAY ──────────────────────────── */
+.mood-burst {
+  position: fixed; inset: 0; z-index: 9999;
+  pointer-events: none; opacity: 0;
+}
+@keyframes moodBurst {
+  0%   { opacity: 0.18; }
+  100% { opacity: 0; }
+}
 
 /* ── NOTE BUILDER ─────────────────────────────────── */
 .builder-section {
@@ -533,6 +543,8 @@ body {
 </head>
 <body>
 
+<div class="mood-burst" id="moodBurst"></div>
+
 <!-- NAV -->
 <nav class="nav">
   <div class="nav-logo">
@@ -786,12 +798,12 @@ const FRAGRANCES = FRAGRANCES_RAW.trim().split('\n').map(line => {
 const ICONS = {};
 
 const MOODS = [
-  { id:'fresh',   name:'Fresh & Clean',    desc:'Cool air, crisp mornings, the feeling just after rain on warm stone.', notes:['Fresh','Citrus'],    color:'#4A90B8' },
-  { id:'floral',  name:'Romantic & Floral',desc:'Petals at dusk, intimate warmth, something undeniably feminine.',      notes:['Floral','Fruits'],   color:'#C47B8A' },
-  { id:'woody',   name:'Earthy & Woody',   desc:'Forests at dawn, dry cedar, the grounding of ancient trees.',         notes:['Woody','Sandalwood'],color:'#8B6240' },
-  { id:'spicy',   name:'Bold & Spicy',     desc:'Confident swagger, dark corners, warmth that commands a room.',       notes:['Herbs & Spices','Amber'],color:'#C9623C' },
-  { id:'sweet',   name:'Warm & Sweet',     desc:'Golden hour light, vanilla air, intimacy and comfort in a bottle.',   notes:['Vanilla','Bourbon'], color:'#C9A84C' },
-  { id:'unisex',  name:'Unexpected & Fluid',desc:'No rules. Clean contradictions. A scent that belongs to no one — and everyone.', notes:['Clean','Gourmand'], color:'#7C6B9E' },
+  { id:'fresh',   name:'Fresh & Clean',    desc:'Cool air, crisp mornings, the feeling just after rain on warm stone.', notes:['Fresh','Citrus'],    color:'#00CED1' },
+  { id:'floral',  name:'Romantic & Floral',desc:'Petals at dusk, intimate warmth, something undeniably feminine.',      notes:['Floral','Fruits'],   color:'#FFB6C1' },
+  { id:'woody',   name:'Earthy & Woody',   desc:'Forests at dawn, dry cedar, the grounding of ancient trees.',         notes:['Woody','Sandalwood'],color:'#C4A882' },
+  { id:'spicy',   name:'Bold & Spicy',     desc:'Confident swagger, dark corners, warmth that commands a room.',       notes:['Herbs & Spices','Amber'],color:'#FF4444' },
+  { id:'sweet',   name:'Warm & Sweet',     desc:'Golden hour light, vanilla air, intimacy and comfort in a bottle.',   notes:['Vanilla','Bourbon'], color:'#FFA500' },
+  { id:'unisex',  name:'Unexpected & Fluid',desc:'No rules. Clean contradictions. A scent that belongs to no one — and everyone.', notes:['Clean','Gourmand'], color:'#FFFFFF' },
 ];
 
 // ── STATE ─────────────────────────────────────────────────────
@@ -845,6 +857,12 @@ function selectMood(id) {
   mood = id;
   document.querySelectorAll('.mood-card').forEach(c => c.classList.toggle('active', c.dataset.id === id));
   const m = MOODS.find(x => x.id === id);
+  // Page-wide color burst
+  const burst = document.getElementById('moodBurst');
+  burst.style.background = m.color;
+  burst.style.animation = 'none';
+  burst.offsetHeight; // force reflow
+  burst.style.animation = 'moodBurst 500ms ease-out forwards';
   showToast(`Mood set: ${m.name}`);
 }
 
