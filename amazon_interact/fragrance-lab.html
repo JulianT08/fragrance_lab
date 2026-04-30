@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fragrance Lab — Amazon × L'Oréal</title>
+<title>L'Oréal Fragrance Lab — Amazon × L'Oréal</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -551,10 +551,10 @@ body {
     <img src="amazon_transparent.png" alt="Amazon" />
   </div>
   <div class="nav-divider"></div>
-  <span class="nav-title">Fragrance Lab</span>
+  <span class="nav-title">L'Oréal Fragrance Lab</span>
   <div class="nav-right">
     <a class="nav-link active" onclick="showSection('builder')">Discover</a>
-    <a class="nav-link" onclick="showSection('popular')">What's Popular</a>
+    <a class="nav-link" onclick="showSection('popular')">Trending</a>
   </div>
 </nav>
 
@@ -566,11 +566,7 @@ body {
   <p class="hero-subtitle">Tell us how you want to feel. We'll map the notes, build your profile, and match you with your perfect fragrance.</p>
   <div class="hero-cta">
     <button class="btn-primary" onclick="scrollToBuilder()">Begin Discovery</button>
-    <button class="btn-ghost" onclick="scrollToBuilder()">How It Works</button>
-  </div>
-  <div class="scroll-hint">
-    <span>Scroll</span>
-    <div class="scroll-line"></div>
+    <button class="btn-ghost" onclick="scrollToEducation()">How It Works</button>
   </div>
 </section>
 
@@ -621,7 +617,7 @@ body {
         <div class="note-layer">
           <div class="layer-header">
             <span class="layer-name">Fragrance Identity</span>
-            <span class="layer-hint">Whose skin are you dressing?</span>
+            <span class="layer-hint"></span>
           </div>
           <div class="notes-grid" id="genderRow"></div>
         </div>
@@ -713,19 +709,20 @@ body {
 </section>
 
 <!-- SCENT PYRAMID (educational) -->
+
 <section class="pyramid-section">
-  <div class="pyramid-inner">
+  <div class="pyramid-inner" id="educationsection">
     <p class="section-label">The Science</p>
     <h2 class="section-title">Understanding the Scent Pyramid</h2>
     <p class="section-sub" style="max-width:520px;margin:0 auto">Every fragrance unfolds in three acts — each note layer evaporates at a different rate, revealing the full composition over time.</p>
     <div class="pyramid-wrap">
-      <div class="pyramid-tier" style="width:40%;--clip:10% 0%,90% 0%,100% 100%,0% 100%;background:rgba(201,169,110,0.35)">
+      <div class="pyramid-tier" style="width:40%;--clip:10% 0%,90% 0%,100% 100%,0% 100%;background:rgba(239, 201, 132, 0.421)">
         <span class="tier-label">Top Notes</span><span class="tier-sub">0–15 min</span>
       </div>
-      <div class="pyramid-tier" style="width:65%;--clip:8% 0%,92% 0%,100% 100%,0% 100%;background:rgba(201,169,110,0.22)">
+      <div class="pyramid-tier" style="width:65%;--clip:8% 0%,92% 0%,100% 100%,0% 100%;background:rgba(210, 175, 111, 0.37)">
         <span class="tier-label">Heart Notes</span><span class="tier-sub">30 min–4 hrs</span>
       </div>
-      <div class="pyramid-tier" style="width:90%;--clip:5% 0%,95% 0%,100% 100%,0% 100%;background:rgba(201,169,110,0.12)">
+      <div class="pyramid-tier" style="width:90%;--clip:5% 0%,95% 0%,100% 100%,0% 100%;background:rgba(201, 169, 110, 0.277)">
         <span class="tier-label">Base Notes</span><span class="tier-sub">4+ hrs</span>
       </div>
     </div>
@@ -1065,6 +1062,10 @@ function showToast(msg) {
 
 function scrollToBuilder() {
   document.getElementById('builderSection').scrollIntoView({ behavior:'smooth' });
+}
+
+function scrollToEducation() {
+  document.getElementById('educationsection').scrollIntoView({ behavior:'smooth' });
 }
 
 function resetBuilder() {
