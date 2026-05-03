@@ -416,6 +416,10 @@ body {
   position: absolute; top: 8px; left: 6px; width: 5px; height: 40%;
   border-radius: 3px; background: rgba(255,255,255,0.15);
 }
+.result-bottle-img {
+  width: 50px; height: 80px;
+  object-fit: contain;
+}
 .result-name {
   font-family: 'Cormorant Garamond', serif;
   font-size: 20px; font-weight: 400; line-height: 1.2;
@@ -896,6 +900,16 @@ function selectNote(group, value, btn) {
   updatePreview();
 }
 
+// ── BOTTLE IMAGES ─────────────────────────────────────────────
+const BOTTLE_IMAGES = {
+  'Azzaro The Most Wanted':        'bottles/bottle_azzaro_most_wanted.png',
+  'Creed Aventus':                 'bottles/bottle_creed_aventus.png',
+  'Aqua di Gio':                   'bottles/bottle_acqua_di_gio.png',
+  'YSL MYSLF':                     'bottles/bottle_ysl_myslf.png',
+  'Acqua di Gio Profondo':         'bottles/bottle_acqua_di_gio_profondo.png',
+  'Valentino Born in Roma Uomo':   'bottles/bottle_valentino_born_in_roma_uomo.png',
+};
+
 // ── PREVIEW ───────────────────────────────────────────────────
 const BOTTLE_COLORS = {
   masculine: { liquid:'rgba(74,144,184,0.5)',  glow:'rgba(74,144,184,0.25)',  bg:'rgba(74,144,184,0.15)'  },
@@ -995,10 +1009,12 @@ function renderResults(matches) {
     card.innerHTML = `
       <div class="match-indicator" style="background:${matchLabel.color}"></div>
       <div class="result-icon-area">
-        <div class="result-mini-bottle" style="background:${colors.bg}">
-          <div class="result-mini-fill" style="background:${colors.liquid}"></div>
-          <div class="result-mini-highlight"></div>
-        </div>
+        ${BOTTLE_IMAGES[f.name]
+          ? `<img src="${BOTTLE_IMAGES[f.name]}" class="result-bottle-img" alt="${f.name}">`
+          : `<div class="result-mini-bottle" style="background:${colors.bg}">
+               <div class="result-mini-fill" style="background:${colors.liquid}"></div>
+               <div class="result-mini-highlight"></div>
+             </div>`}
       </div>
       <div class="result-brand">${brand}</div>
       <div class="result-name">${f.name.replace(brand, '').trim() || f.name}</div>
