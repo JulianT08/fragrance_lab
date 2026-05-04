@@ -536,6 +536,206 @@ body {
 .toast.show { transform: translateY(0); opacity: 1; }
 .toast-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
 
+/* ── SAMPLE POPUP ─────────────────────────────────── */
+.sample-overlay {
+  position: fixed; inset: 0; z-index: 1000;
+  background: rgba(5,5,8,0.78);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 1.5rem;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+.sample-overlay.visible { opacity: 1; pointer-events: all; }
+
+.sample-box {
+  position: relative;
+  width: min(440px, 100%);
+  background: linear-gradient(160deg, #14141c 0%, #1c1c26 55%, #0e0e14 100%);
+  border: 1px solid rgba(201,169,110,0.22);
+  border-radius: 4px;
+  padding: 3rem 2.4rem 2.2rem;
+  text-align: center;
+  overflow: hidden;
+  box-shadow:
+    0 30px 80px rgba(0,0,0,0.6),
+    inset 0 1px 0 rgba(255,255,255,0.04);
+  transform: scale(0.94) translateY(10px);
+  transition: transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+.sample-overlay.visible .sample-box { transform: scale(1) translateY(0); }
+
+/* atmospheric mist orbs inside popup */
+.sample-box::before,
+.sample-box::after {
+  content: ''; position: absolute;
+  border-radius: 50%; pointer-events: none;
+  filter: blur(50px); z-index: 0;
+}
+.sample-box::before {
+  width: 260px; height: 260px;
+  top: -60px; left: -80px;
+  background: radial-gradient(circle, rgba(201,169,110,0.32) 0%, transparent 70%);
+  animation: mistDrift 14s ease-in-out infinite alternate;
+}
+.sample-box::after {
+  width: 240px; height: 240px;
+  bottom: -90px; right: -70px;
+  background: radial-gradient(circle, rgba(74,144,184,0.22) 0%, transparent 70%);
+  animation: mistDrift 18s ease-in-out -4s infinite alternate-reverse;
+}
+@keyframes mistDrift {
+  from { transform: translate(0,0) scale(1); }
+  to   { transform: translate(30px, 25px) scale(1.18); }
+}
+
+.sample-close {
+  position: absolute; top: 12px; right: 12px;
+  width: 28px; height: 28px; border-radius: 50%;
+  background: transparent; border: 1px solid var(--border);
+  color: var(--muted); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 300;
+  line-height: 1; padding: 0;
+  transition: var(--transition); z-index: 3;
+}
+.sample-close:hover { color: var(--text); border-color: rgba(255,255,255,0.3); }
+
+.sample-content { position: relative; z-index: 2; }
+
+.sample-eyebrow {
+  font-size: 9px; letter-spacing: 4px; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 0.7rem;
+}
+.sample-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 34px; font-weight: 300;
+  color: var(--gold); line-height: 1.1; letter-spacing: 0.5px;
+  margin-bottom: 0.5rem;
+}
+.sample-title em { font-style: italic; color: var(--gold2); }
+.sample-sub {
+  font-size: 12px; color: var(--muted); font-weight: 300;
+  letter-spacing: 0.4px; margin-bottom: 1.6rem;
+}
+
+.sample-stage {
+  height: 220px;
+  display: flex; align-items: flex-end; justify-content: center;
+  margin-bottom: 0.6rem; position: relative;
+}
+.sample-bottle {
+  width: 100px; height: 200px; position: relative;
+  transition: transform 0.4s ease, filter 0.4s ease, opacity 0.5s ease;
+}
+.sample-bottle.ready {
+  cursor: pointer;
+  animation: bottleReady 2.4s ease-in-out infinite;
+}
+.sample-bottle.ready:hover { transform: translateY(-4px); }
+@keyframes bottleReady {
+  0%,100% { filter: drop-shadow(0 0 12px rgba(201,169,110,0.3)); }
+  50%     { filter: drop-shadow(0 0 24px rgba(232,201,122,0.65)); }
+}
+.sample-bottle.revealing {
+  opacity: 0; transform: scale(0.85);
+}
+
+.sample-bottle .bottle-cap {
+  width: 38px; height: 20px; border-radius: 3px 3px 0 0;
+  background: linear-gradient(135deg, #888, #555);
+  margin: 0 auto;
+}
+.sample-bottle .bottle-neck {
+  width: 28px; height: 28px; margin: 0 auto;
+  background: rgba(201,169,110,0.18);
+  border-left: 1px solid rgba(255,255,255,0.1);
+  border-right: 1px solid rgba(255,255,255,0.1);
+}
+.sample-bottle .bottle-body {
+  width: 88px; height: 148px; margin: 0 auto;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.14);
+  position: relative; overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.45);
+}
+.sample-bottle .bottle-fill {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 0%;
+  background: linear-gradient(to top, var(--gold) 0%, var(--gold2) 100%);
+  opacity: 0.6;
+  transition: height 4.5s cubic-bezier(0.45,0.05,0.55,0.95);
+}
+.sample-bottle .bottle-fill::after {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6px;
+  background: rgba(255,255,255,0.25);
+  animation: liquidWave 3s ease-in-out infinite;
+}
+.sample-bottle .bottle-highlight {
+  position: absolute; top: 10px; left: 8px;
+  width: 8px; height: 60%; border-radius: 4px;
+  background: rgba(255,255,255,0.14);
+}
+
+.sample-reveal {
+  position: absolute; inset: 0;
+  display: flex; align-items: flex-end; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.5s ease 0.15s;
+}
+.sample-reveal.visible { opacity: 1; }
+.sample-reveal-img {
+  max-height: 210px; max-width: 80%;
+  object-fit: contain;
+  filter: drop-shadow(0 18px 30px rgba(0,0,0,0.5));
+}
+.sample-reveal-fallback {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 64px; color: var(--gold); opacity: 0.75;
+  line-height: 1;
+}
+
+.sample-hint {
+  font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase;
+  color: var(--muted); min-height: 14px;
+  transition: color 0.4s, opacity 0.4s;
+  opacity: 0;
+}
+.sample-hint.visible { opacity: 1; }
+.sample-hint.ready { color: var(--gold); }
+
+.sample-fragrance-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px; font-weight: 400;
+  color: var(--text);
+  margin-top: 0.3rem; min-height: 28px;
+  opacity: 0; transition: opacity 0.5s 0.3s;
+}
+.sample-fragrance-name.visible { opacity: 1; }
+
+.sample-accept {
+  width: 100%;
+  padding: 14px 24px; border-radius: 2px; border: none;
+  background: var(--gold); color: var(--ink);
+  font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 500;
+  letter-spacing: 2.5px; text-transform: uppercase; cursor: pointer;
+  transition: var(--transition);
+  margin-top: 1.2rem;
+  opacity: 0; pointer-events: none;
+  transform: translateY(8px);
+}
+.sample-accept.visible { opacity: 1; pointer-events: all; transform: translateY(0); }
+.sample-accept:hover { background: var(--gold2); transform: translateY(-1px); }
+
+.sample-fineprint {
+  font-size: 10px; color: rgba(255,255,255,0.3);
+  letter-spacing: 0.5px; margin-top: 0.9rem;
+  opacity: 0; transition: opacity 0.4s 0.5s;
+}
+.sample-fineprint.visible { opacity: 1; }
+
 /* Responsive */
 @media (max-width: 800px) {
   .builder-grid { grid-template-columns: 1fr; }
@@ -543,6 +743,8 @@ body {
   .mood-grid { grid-template-columns: 1fr; }
   .demo-grid { grid-template-columns: 1fr; }
   .results-grid { grid-template-columns: 1fr; }
+  .sample-title { font-size: 28px; }
+  .sample-box { padding: 2.4rem 1.6rem 1.8rem; }
 }
 </style>
 </head>
@@ -752,6 +954,36 @@ body {
 <footer class="footer">
   <span>Fragrance Lab by L'Oréal Luxe · An Amazon Interactive Experience · 2025</span>
 </footer>
+
+<!-- SAMPLE POPUP -->
+<div class="sample-overlay" id="sampleOverlay" role="dialog" aria-modal="true" aria-labelledby="sampleTitle">
+  <div class="sample-box">
+    <button class="sample-close" id="sampleClose" aria-label="Close">×</button>
+    <div class="sample-content">
+      <p class="sample-eyebrow">A Gift From The Lab</p>
+      <h2 class="sample-title" id="sampleTitle">Have a sample…<br><em>on us.</em></h2>
+      <p class="sample-sub">Watch your scent come together — then tap to reveal.</p>
+
+      <div class="sample-stage">
+        <div class="sample-bottle" id="sampleBottle">
+          <div class="bottle-cap"></div>
+          <div class="bottle-neck"></div>
+          <div class="bottle-body">
+            <div class="bottle-fill" id="sampleBottleFill"></div>
+            <div class="bottle-highlight"></div>
+          </div>
+        </div>
+        <div class="sample-reveal" id="sampleReveal"></div>
+      </div>
+
+      <div class="sample-hint" id="sampleHint">Filling your sample…</div>
+      <div class="sample-fragrance-name" id="sampleFragranceName"></div>
+
+      <button class="sample-accept" id="sampleAccept">Claim My Free Sample</button>
+      <p class="sample-fineprint" id="sampleFineprint">A 2 ml vial — shipped with your next Amazon order.</p>
+    </div>
+  </div>
+</div>
 
 <!-- TOAST -->
 <div class="toast" id="toast">
@@ -970,6 +1202,8 @@ function findMatches() {
   renderResults(scored);
   document.getElementById('resultsSection').classList.add('visible');
   document.getElementById('resultsSection').scrollIntoView({ behavior:'smooth', block:'start' });
+
+  if (scored.length > 0) schedulePopup(scored[0]);
 }
 
 // ── RENDER RESULTS ────────────────────────────────────────────
@@ -1084,6 +1318,7 @@ function scrollToEducation() {
 }
 
 function resetBuilder() {
+  closeSamplePopup();
   state = { gender:null, top:null, mid:null, base:null };
   document.querySelectorAll('.note-pill').forEach(p => p.classList.remove('selected'));
   document.getElementById('resultsSection').classList.remove('visible');
@@ -1106,6 +1341,116 @@ function showSection(sec) {
     window.location.href = 'popular.html';
   }
 }
+
+// ── SAMPLE POPUP ──────────────────────────────────────────────
+let topMatch = null;
+let samplePopupTimer = null;
+let sampleFillTimer = null;
+let sampleState = 'idle'; // idle | filling | ready | revealed
+
+function schedulePopup(match) {
+  topMatch = match;
+  clearTimeout(samplePopupTimer);
+  samplePopupTimer = setTimeout(openSamplePopup, 7000);
+}
+
+function openSamplePopup() {
+  if (!topMatch) return;
+  const overlay = document.getElementById('sampleOverlay');
+  const fill    = document.getElementById('sampleBottleFill');
+  const bottle  = document.getElementById('sampleBottle');
+  const hint    = document.getElementById('sampleHint');
+  const reveal  = document.getElementById('sampleReveal');
+  const name    = document.getElementById('sampleFragranceName');
+  const accept  = document.getElementById('sampleAccept');
+  const fine    = document.getElementById('sampleFineprint');
+
+  sampleState = 'filling';
+  bottle.classList.remove('ready', 'revealing');
+  bottle.style.display = '';
+  reveal.classList.remove('visible');
+  reveal.innerHTML = '';
+  name.classList.remove('visible'); name.textContent = '';
+  accept.classList.remove('visible');
+  fine.classList.remove('visible');
+  hint.classList.remove('ready');
+  hint.textContent = 'Filling your sample…';
+  fill.style.transition = 'none';
+  fill.style.height = '0%';
+
+  const colors = BOTTLE_COLORS[topMatch.sex] || DEFAULT_COLOR;
+  fill.style.background = `linear-gradient(to top, ${colors.liquid} 0%, var(--gold2) 100%)`;
+
+  overlay.classList.add('visible');
+  hint.classList.add('visible');
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      fill.style.transition = '';
+      fill.style.height = '78%';
+    });
+  });
+
+  clearTimeout(sampleFillTimer);
+  sampleFillTimer = setTimeout(() => {
+    if (sampleState !== 'filling') return;
+    sampleState = 'ready';
+    bottle.classList.add('ready');
+    hint.classList.add('ready');
+    hint.textContent = 'Tap the bottle to reveal';
+  }, 4700);
+}
+
+function revealSample() {
+  if (sampleState !== 'ready' || !topMatch) return;
+  sampleState = 'revealed';
+
+  const bottle = document.getElementById('sampleBottle');
+  const reveal = document.getElementById('sampleReveal');
+  const hint   = document.getElementById('sampleHint');
+  const name   = document.getElementById('sampleFragranceName');
+  const accept = document.getElementById('sampleAccept');
+  const fine   = document.getElementById('sampleFineprint');
+
+  bottle.classList.remove('ready');
+  bottle.classList.add('revealing');
+  setTimeout(() => { bottle.style.display = 'none'; }, 500);
+
+  const img = BOTTLE_IMAGES[topMatch.name];
+  reveal.innerHTML = img
+    ? `<img class="sample-reveal-img" src="${img}" alt="${topMatch.name}">`
+    : `<div class="sample-reveal-fallback">✦</div>`;
+  reveal.classList.add('visible');
+
+  hint.textContent = 'Your top match';
+  hint.classList.remove('ready');
+  name.textContent = topMatch.name;
+  name.classList.add('visible');
+  accept.classList.add('visible');
+  fine.classList.add('visible');
+}
+
+function closeSamplePopup() {
+  document.getElementById('sampleOverlay').classList.remove('visible');
+  sampleState = 'idle';
+  clearTimeout(samplePopupTimer);
+  clearTimeout(sampleFillTimer);
+}
+
+function acceptSample() {
+  if (topMatch) showToast(`Free sample of ${topMatch.name} on its way!`);
+  closeSamplePopup();
+}
+
+document.getElementById('sampleClose').addEventListener('click', closeSamplePopup);
+document.getElementById('sampleBottle').addEventListener('click', revealSample);
+document.getElementById('sampleAccept').addEventListener('click', acceptSample);
+document.getElementById('sampleOverlay').addEventListener('click', (e) => {
+  if (e.target.id === 'sampleOverlay') closeSamplePopup();
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeSamplePopup();
+});
 
 // ── INIT ──────────────────────────────────────────────────────
 buildCloud();
