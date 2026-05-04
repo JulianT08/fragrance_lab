@@ -400,7 +400,8 @@ body {
   transition: opacity 0.3s;
 }
 .result-icon-area {
-  width: 60px; height: 90px; margin-bottom: 1.5rem; position: relative;
+  width: 100%; height: 170px; margin-bottom: 1.5rem; position: relative;
+  display: flex; align-items: flex-end; justify-content: center;
 }
 .result-mini-bottle {
   width: 50px; height: 80px;
@@ -417,15 +418,15 @@ body {
   border-radius: 3px; background: rgba(255,255,255,0.15);
 }
 .result-bottle-img {
-  width: 100; height: 160px;
+  max-width: 100%; max-height: 160px;
   object-fit: contain;
+  display: block;
 }
 .result-name {
   font-family: 'Cormorant Garamond', serif;
   font-size: 20px; font-weight: 400; line-height: 1.2;
-  margin-bottom: 0.3rem;
+  margin-bottom: 1rem;
 }
-.result-brand { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 1rem; }
 .result-match-label {
   font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
   margin-bottom: 1.2rem; font-weight: 500;
@@ -1001,7 +1002,6 @@ function renderResults(matches) {
                      : f.score === 2 ? { text:'Strong Match',  color:'#4A90B8' }
                      :                  { text:'Partial Match', color:'#666'    };
     const starsHtml = '★'.repeat(Math.floor(f.stars)) + (f.stars % 1 >= 0.5 ? '½' : '');
-    const brand = f.name.split(' ').slice(0,1).join(' ');
 
     const card = document.createElement('div');
     card.className = 'result-card';
@@ -1016,8 +1016,7 @@ function renderResults(matches) {
                <div class="result-mini-highlight"></div>
              </div>`}
       </div>
-      <div class="result-brand">${brand}</div>
-      <div class="result-name">${f.name.replace(brand, '').trim() || f.name}</div>
+      <div class="result-name">${f.name}</div>
       <div class="result-match-label" style="color:${matchLabel.color}">${matchLabel.text}</div>
       <div class="result-notes-row">
         <span class="result-note-tag">${f.top}</span>
