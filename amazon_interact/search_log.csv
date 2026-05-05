@@ -57,3 +57,10 @@ id,timestamp,ip_address,respondent_sex,respondent_age,fragrance_gender,top_note,
 56,2026-05-03 21:16:15,192.168.4.56,F,,feminine,Fruits,Fresh,Vanilla,432
 57,2026-05-03 21:49:15,192.168.4.56,F,19,feminine,Fruits,Fresh,Vanilla,15
 58,2026-05-03 21:50:21,192.168.4.56,F,19,feminine,Fruits,Fresh,Vanilla,13
+59,2026-05-04 19:13:58,10.51.21.81,M,17,masculine,Fresh,Gourmand,Sandalwood,38
+60,2026-05-04 19:18:55,10.51.22.122,,,masculine,Fresh,Gourmand,Sandalwood,27
+61,2026-05-04 19:21:15,10.51.22.122,,,feminine,Fruits,Fresh,Vanilla,15
+62,2026-05-04 19:32:35,10.51.21.81,M,17,masculine,Fresh,Bourbon,Sandalwood,1154
+63,2026-05-04 19:32:59,10.51.21.81,M,17,masculine,Fruits,Fresh,Sandalwood,1178
+64,2026-05-04 19:36:13,10.51.21.81,,,masculine,Fruits,Fresh,Sandalwood,14
+65,2026-05-04 19:50:17,10.51.21.81,,,masculine,Fruits,Fresh,Sandalwood,18
